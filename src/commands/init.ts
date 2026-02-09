@@ -97,6 +97,21 @@ export async function init(options: InitOptions): Promise<void> {
 
     if (!fs.existsSync(sourceDir)) continue;
 
+    // Local priority: skip if directory exists and is not a symlink
+    if (fs.existsSync(targetPath)) {
+      try {
+        const stat = fs.lstatSync(targetPath);
+        if (!stat.isSymbolicLink()) {
+          console.log(`   ⏭️  ${category}/ → skipped (local exists)`);
+          continue;
+        }
+        // Remove existing symlink to recreate
+        fs.unlinkSync(targetPath);
+      } catch (e) {
+        // Ignore errors
+      }
+    }
+
     if (mode === 'symlink') {
       createSymlink(sourceDir, targetPath);
       console.log(`   🔗 ${category}/ → symlink`);
@@ -110,6 +125,40 @@ export async function init(options: InitOptions): Promise<void> {
       }
       console.log(`   📄 ${category}/ → copied`);
     }
+  }
+
+  // Install hooks
+  const hooksSourceDir = path.join(configDir, 'hooks');
+  const hooksTargetDir = path.join(claudeDir, 'hooks');
+  if (fs.existsSync(hooksSourceDir) || fs.existsSync(path.join(PACKAGE_ROOT, 'config', 'hooks'))) {
+    const hooksSource = fs.existsSync(hooksSourceDir)
+      ? hooksSourceDir
+      : path.join(PACKAGE_ROOT, 'config', 'hooks');
+
+    if (!fs.existsSync(hooksTargetDir)) {
+      ensureDir(hooksTargetDir);
+      const files = fs.readdirSync(hooksSource);
+      for (const file of files) {
+        const src = path.join(hooksSource, file);
+        const dest = path.join(hooksTargetDir, file);
+        if (fs.statSync(src).isFile()) {
+          fs.copyFileSync(src, dest);
+        }
+      }
+      console.log(`   📄 hooks/ → copied`);
+    } else {
+      console.log(`   ⏭️  hooks/ → skipped (local exists)`);
+    }
+  }
+
+  // Install settings.json
+  const settingsSource = path.join(PACKAGE_ROOT, 'config', 'settings.json');
+  const settingsTarget = path.join(claudeDir, 'settings.json');
+  if (fs.existsSync(settingsSource) && !fs.existsSync(settingsTarget)) {
+    fs.copyFileSync(settingsSource, settingsTarget);
+    console.log(`   📄 settings.json → copied`);
+  } else if (fs.existsSync(settingsTarget)) {
+    console.log(`   ⏭️  settings.json → skipped (local exists)`);
   }
 
   // Save metadata

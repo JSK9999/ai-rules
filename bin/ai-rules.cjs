@@ -9,7 +9,7 @@ const VERSION = require('../package.json').version;
 
 program
   .name('ai-rules')
-  .description('AI coding assistant rule manager for Claude Code and Codex')
+  .description('AI coding assistant rule manager for Claude Code, Codex, and Cursor')
   .version(VERSION);
 
 program

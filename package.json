@@ -1,7 +1,7 @@
 {
   "name": "ai-rules",
   "version": "1.0.0",
-  "description": "AI coding assistant rule manager for Claude Code and Codex",
+  "description": "AI coding assistant rule manager for Claude Code, Codex, and Cursor",
   "main": "dist/index.js",
   "bin": {
     "ai-rules": "bin/ai-rules.cjs"
@@ -17,10 +17,12 @@
   "keywords": [
     "claude",
     "codex",
+    "cursor",
     "ai",
     "rules",
     "cli",
-    "coding-assistant"
+    "coding-assistant",
+    "semantic-router"
   ],
   "author": "JSK9999",
   "license": "MIT",

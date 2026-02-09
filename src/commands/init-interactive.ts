@@ -14,6 +14,24 @@ import {
 } from '../utils/files.js';
 import { scanConfigDir, type ConfigFile } from '../utils/config-scanner.js';
 
+// Convert .md to .mdc format for Cursor
+function convertToMdc(content: string, filename: string): string {
+  const isEssential = filename.toLowerCase().includes('essential');
+  const alwaysApply = isEssential ? 'true' : 'false';
+
+  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+
+  if (frontmatterMatch) {
+    let frontmatter = frontmatterMatch[1];
+    if (!frontmatter.includes('alwaysApply')) {
+      frontmatter = frontmatter + `\nalwaysApply: ${alwaysApply}`;
+    }
+    return content.replace(frontmatterMatch[1], frontmatter);
+  } else {
+    return `---\nalwaysApply: ${alwaysApply}\n---\n\n${content}`;
+  }
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = path.resolve(__dirname, '../..');
 const require = createRequire(import.meta.url);
@@ -78,6 +96,7 @@ export async function initInteractive(): Promise<void> {
       choices: [
         { name: 'Claude Code (.claude/)', value: 'claude', checked: true },
         { name: 'Codex (.codex/)', value: 'codex', checked: false },
+        { name: 'Cursor (.cursor/rules/)', value: 'cursor', checked: false },
       ],
       validate: (input: string[]) => input.length > 0 || '최소 하나 이상 선택해주세요',
     },
@@ -89,6 +108,14 @@ export async function initInteractive(): Promise<void> {
     value: cat.name,
     checked: ['rules', 'commands'].includes(cat.name),
   }));
+
+  // Add hooks and settings options for Claude Code
+  if (tools.includes('claude')) {
+    categoryChoices.push(
+      { name: 'hooks/ (Semantic Router) - Claude Code hook', value: 'hooks', checked: true },
+      { name: 'settings.json (Claude Code 설정)', value: 'settings', checked: true }
+    );
+  }
 
   const { categories } = await inquirer.prompt<{ categories: string[] }>([
     {
@@ -241,6 +268,9 @@ export async function initInteractive(): Promise<void> {
   if (tools.includes('codex')) {
     console.log(`   Codex:  ${path.join(targetDir, '.codex')}`);
   }
+  if (tools.includes('cursor')) {
+    console.log(`   Cursor: ${path.join(targetDir, '.cursor/rules')}`);
+  }
   console.log(`   모드: ${method}`);
   if (template) {
     console.log(`   템플릿: ${template}`);
@@ -264,8 +294,11 @@ async function install(selections: Selections): Promise<void> {
 
   const builtinConfigDir = path.join(PACKAGE_ROOT, 'config');
 
+  // Filter out special categories (hooks, settings)
+  const fileCategories = categories.filter(c => !['hooks', 'settings'].includes(c));
+
   // Copy selected files to .ai-rules/config/
-  for (const category of categories) {
+  for (const category of fileCategories) {
     const srcCatDir = path.join(builtinConfigDir, category);
     const destCatDir = path.join(configDir, category);
 
@@ -287,15 +320,69 @@ async function install(selections: Selections): Promise<void> {
 
   // Install for each selected tool
   for (const tool of tools) {
+    if (tool === 'cursor') {
+      // Cursor: install .mdc files to .cursor/rules/
+      const cursorRulesDir = path.join(targetDir, '.cursor', 'rules');
+      ensureDir(cursorRulesDir);
+
+      for (const category of fileCategories) {
+        const srcCatDir = path.join(configDir, category);
+        if (!fs.existsSync(srcCatDir)) continue;
+
+        const files = selectedFiles[category] || [];
+        for (const file of files) {
+          const srcFile = path.join(srcCatDir, file);
+          if (!fs.existsSync(srcFile)) continue;
+
+          const mdcName = file.replace('.md', '.mdc');
+          const destFile = path.join(cursorRulesDir, mdcName);
+
+          // Local priority: skip if file exists
+          if (fs.existsSync(destFile)) continue;
+
+          const content = fs.readFileSync(srcFile, 'utf8');
+          const mdcContent = convertToMdc(content, file);
+          ensureDir(path.dirname(destFile));
+          fs.writeFileSync(destFile, mdcContent);
+        }
+      }
+      continue;
+    }
+
     const toolDir = path.join(targetDir, tool === 'claude' ? '.claude' : '.codex');
     ensureDir(toolDir);
 
     // Create symlinks or copy to tool directory
-    for (const category of categories) {
+    for (const category of fileCategories) {
       const sourceDir = path.join(configDir, category);
       const targetPath = path.join(toolDir, category);
 
       if (!fs.existsSync(sourceDir)) continue;
+
+      // Local priority: skip if directory exists and is not a symlink
+      if (fs.existsSync(targetPath)) {
+        try {
+          const stat = fs.lstatSync(targetPath);
+          if (!stat.isSymbolicLink()) {
+            // Existing directory - only add new files
+            if (method === 'copy') {
+              const files = scanDir(sourceDir);
+              for (const [rel, content] of Object.entries(files)) {
+                const dest = path.join(targetPath, rel);
+                if (!fs.existsSync(dest)) {
+                  ensureDir(path.dirname(dest));
+                  fs.writeFileSync(dest, content);
+                }
+              }
+            }
+            continue;
+          }
+          // Symlink - remove and recreate
+          fs.unlinkSync(targetPath);
+        } catch (e) {
+          // Ignore errors
+        }
+      }
 
       if (method === 'symlink') {
         createSymlink(sourceDir, targetPath);
@@ -310,14 +397,50 @@ async function install(selections: Selections): Promise<void> {
       }
     }
 
+    // Install hooks for Claude Code
+    if (tool === 'claude' && categories.includes('hooks')) {
+      const hooksDir = path.join(toolDir, 'hooks');
+      const srcHooksDir = path.join(builtinConfigDir, 'hooks');
+
+      if (fs.existsSync(srcHooksDir)) {
+        ensureDir(hooksDir);
+
+        const hooksFiles = fs.readdirSync(srcHooksDir);
+        for (const file of hooksFiles) {
+          const src = path.join(srcHooksDir, file);
+          const dest = path.join(hooksDir, file);
+
+          // Local priority: skip if file exists
+          if (fs.existsSync(dest)) continue;
+
+          if (fs.statSync(src).isFile()) {
+            fs.copyFileSync(src, dest);
+          }
+        }
+      }
+    }
+
+    // Install settings.json for Claude Code
+    if (tool === 'claude' && categories.includes('settings')) {
+      const settingsFile = path.join(builtinConfigDir, 'settings.json');
+      const destSettings = path.join(toolDir, 'settings.json');
+
+      // Local priority: skip if file exists
+      if (!fs.existsSync(destSettings) && fs.existsSync(settingsFile)) {
+        fs.copyFileSync(settingsFile, destSettings);
+      }
+    }
+
     // Copy template CLAUDE.md or AGENTS.md
     if (template) {
       const templateDir = path.join(builtinConfigDir, 'templates', template);
 
       if (tool === 'claude') {
         const templateFile = path.join(templateDir, 'CLAUDE.md');
-        if (fs.existsSync(templateFile)) {
-          fs.copyFileSync(templateFile, path.join(toolDir, 'CLAUDE.md'));
+        const destTemplate = path.join(toolDir, 'CLAUDE.md');
+        // Local priority: skip if file exists
+        if (!fs.existsSync(destTemplate) && fs.existsSync(templateFile)) {
+          fs.copyFileSync(templateFile, destTemplate);
         }
       }
     }
@@ -325,8 +448,10 @@ async function install(selections: Selections): Promise<void> {
     // Copy AGENTS.md for Codex
     if (tool === 'codex') {
       const agentsFile = path.join(builtinConfigDir, 'codex', 'AGENTS.md');
-      if (fs.existsSync(agentsFile)) {
-        fs.copyFileSync(agentsFile, path.join(toolDir, 'AGENTS.md'));
+      const destAgents = path.join(toolDir, 'AGENTS.md');
+      // Local priority: skip if file exists
+      if (!fs.existsSync(destAgents) && fs.existsSync(agentsFile)) {
+        fs.copyFileSync(agentsFile, destAgents);
       }
     }
   }

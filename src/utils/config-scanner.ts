@@ -21,6 +21,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   skills: 'AI 스킬',
   agents: '서브에이전트',
   contexts: '컨텍스트',
+  hooks: 'Semantic Router Hook',
 };
 
 /**
