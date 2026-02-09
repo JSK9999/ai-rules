@@ -34,8 +34,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm test
-        continue-on-error: true
+        run: npm test -- --run
 
       - name: Release
         env:

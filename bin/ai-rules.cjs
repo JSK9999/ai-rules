@@ -98,4 +98,23 @@ program
     }
   });
 
+program
+  .command('uninstall')
+  .description('Remove ai-rules installation')
+  .option('-f, --force', 'Skip confirmation prompt')
+  .option('-g, --global', 'Uninstall global installation only')
+  .option('-p, --project', 'Uninstall project installation only')
+  .action(async (options) => {
+    const { uninstall } = await import('../dist/commands/uninstall.js');
+    await uninstall(options);
+  });
+
+program
+  .command('doctor')
+  .description('Diagnose ai-rules installation')
+  .action(async () => {
+    const { doctor } = await import('../dist/commands/doctor.js');
+    await doctor();
+  });
+
 program.parse();
