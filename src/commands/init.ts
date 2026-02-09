@@ -41,9 +41,9 @@ export async function init(options: InitOptions): Promise<void> {
   const configDir = path.join(aiRulesDir, 'config');
   const mode = copyMode ? 'copy' : 'symlink';
 
-  console.log(`\n📦 ai-rules ${scope === 'global' ? 'global' : 'project'} setup\n`);
+  console.log(`\n📦 ai-nexus ${scope === 'global' ? 'global' : 'project'} setup\n`);
 
-  // Create .ai-rules directory
+  // Create .ai-nexus directory
   ensureDir(aiRulesDir);
   ensureDir(configDir);
 
@@ -179,7 +179,7 @@ export async function init(options: InitOptions): Promise<void> {
   console.log(`   Mode: ${mode}\n`);
 
   if (mode === 'symlink') {
-    console.log('💡 Run "ai-rules update" to sync latest rules\n');
+    console.log('💡 Run "ai-nexus update" to sync latest rules\n');
   }
 }
 

@@ -62,7 +62,7 @@ export function getTargetDir(scope: 'project' | 'global'): string {
 
 export function getConfigPath(scope: 'project' | 'global'): string {
   const base = getTargetDir(scope);
-  return path.join(base, '.ai-rules');
+  return path.join(base, '.ai-nexus');
 }
 
 export function ensureDir(dir: string): void {
@@ -85,12 +85,12 @@ export function createSymlink(target: string, linkPath: string): void {
 }
 
 export function detectInstall(): { configPath: string; scope: 'project' | 'global' } | null {
-  const projectPath = path.join(process.cwd(), '.ai-rules');
+  const projectPath = path.join(process.cwd(), '.ai-nexus');
   if (fs.existsSync(projectPath)) {
     return { configPath: projectPath, scope: 'project' };
   }
 
-  const globalPath = path.join(os.homedir(), '.ai-rules');
+  const globalPath = path.join(os.homedir(), '.ai-nexus');
   if (fs.existsSync(globalPath)) {
     return { configPath: globalPath, scope: 'global' };
   }

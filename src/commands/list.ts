@@ -18,15 +18,15 @@ export async function list(): Promise<void> {
   const install = detectInstall();
 
   if (!install) {
-    console.log('\n📋 ai-rules - No installation found\n');
-    console.log('Run "ai-rules init" or "ai-rules install" to get started.\n');
+    console.log('\n📋 ai-nexus - No installation found\n');
+    console.log('Run "ai-nexus init" or "ai-nexus install" to get started.\n');
     return;
   }
 
   const { configPath, scope } = install;
   const configDir = path.join(configPath, 'config');
 
-  console.log('\n📋 ai-rules - Installed Rules\n');
+  console.log('\n📋 ai-nexus - Installed Rules\n');
   console.log('='.repeat(50));
 
   // Read metadata
@@ -64,7 +64,7 @@ export async function list(): Promise<void> {
   }
 
   console.log('\n' + '='.repeat(50));
-  console.log('💡 Run "ai-rules update" to sync latest rules\n');
+  console.log('💡 Run "ai-nexus update" to sync latest rules\n');
 }
 
 function listFilesRecursive(dir: string, base = ''): string[] {

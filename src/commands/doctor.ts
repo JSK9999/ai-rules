@@ -11,7 +11,7 @@ interface CheckResult {
 }
 
 export async function doctor(): Promise<void> {
-  console.log(chalk.cyan('\n🩺 ai-rules doctor\n'));
+  console.log(chalk.cyan('\n🩺 ai-nexus doctor\n'));
   console.log(chalk.gray('─'.repeat(50)));
 
   const results: CheckResult[] = [];
@@ -53,7 +53,7 @@ export async function doctor(): Promise<void> {
     results.push({
       name: 'Installation',
       status: 'error',
-      message: 'No installation found. Run "ai-rules install" first.',
+      message: 'No installation found. Run "ai-nexus install" first.',
     });
   }
 
@@ -218,7 +218,7 @@ export async function doctor(): Promise<void> {
   const warnings = results.filter(r => r.status === 'warn').length;
 
   if (errors > 0) {
-    console.log(chalk.red(`\n❌ ${errors} error(s) found. Run "ai-rules install" to fix.\n`));
+    console.log(chalk.red(`\n❌ ${errors} error(s) found. Run "ai-nexus install" to fix.\n`));
   } else if (warnings > 0) {
     console.log(chalk.yellow(`\n⚠️  ${warnings} warning(s). Everything should still work.\n`));
   } else {

@@ -8,7 +8,7 @@ const os = require('os');
 const VERSION = require('../package.json').version;
 
 program
-  .name('ai-rules')
+  .name('ai-nexus')
   .description('AI coding assistant rule manager for Claude Code, Codex, and Cursor')
   .version(VERSION);
 
@@ -93,14 +93,14 @@ program
     } else if (input) {
       await test(input, options);
     } else {
-      console.log('Usage: ai-rules test <input> [--keyword]');
-      console.log('       ai-rules test --list');
+      console.log('Usage: ai-nexus test <input> [--keyword]');
+      console.log('       ai-nexus test --list');
     }
   });
 
 program
   .command('uninstall')
-  .description('Remove ai-rules installation')
+  .description('Remove ai-nexus installation')
   .option('-f, --force', 'Skip confirmation prompt')
   .option('-g, --global', 'Uninstall global installation only')
   .option('-p, --project', 'Uninstall project installation only')
@@ -111,7 +111,7 @@ program
 
 program
   .command('doctor')
-  .description('Diagnose ai-rules installation')
+  .description('Diagnose ai-nexus installation')
   .action(async () => {
     const { doctor } = await import('../dist/commands/doctor.js');
     await doctor();

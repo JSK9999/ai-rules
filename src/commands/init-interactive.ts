@@ -194,7 +194,7 @@ export async function initInteractive(): Promise<void> {
       message: '설치 방식을 선택하세요',
       choices: [
         {
-          name: '🔗 symlink (ai-rules update로 자동 업데이트)',
+          name: '🔗 symlink (ai-nexus update로 자동 업데이트)',
           value: 'symlink',
         },
         {
@@ -259,7 +259,7 @@ export async function initInteractive(): Promise<void> {
   // 완료 메시지
   const targetDir = getTargetDir(scope);
 
-  console.log(chalk.green('\n✅ ai-rules 설치 완료!\n'));
+  console.log(chalk.green('\n✅ ai-nexus 설치 완료!\n'));
   console.log(chalk.gray('─'.repeat(40)));
 
   if (tools.includes('claude')) {
@@ -278,7 +278,7 @@ export async function initInteractive(): Promise<void> {
   console.log(chalk.gray('─'.repeat(40)));
 
   if (method === 'symlink') {
-    console.log(chalk.cyan('\n💡 팁: ai-rules update로 최신 규칙을 동기화하세요\n'));
+    console.log(chalk.cyan('\n💡 팁: ai-nexus update로 최신 규칙을 동기화하세요\n'));
   }
 }
 
@@ -297,7 +297,7 @@ async function install(selections: Selections): Promise<void> {
   // Filter out special categories (hooks, settings)
   const fileCategories = categories.filter(c => !['hooks', 'settings'].includes(c));
 
-  // Copy selected files to .ai-rules/config/
+  // Copy selected files to .ai-nexus/config/
   for (const category of fileCategories) {
     const srcCatDir = path.join(builtinConfigDir, category);
     const destCatDir = path.join(configDir, category);
@@ -478,7 +478,7 @@ function printHeader(): void {
   console.log(chalk.cyan(`
    ╭─────────────────────────────────╮
    │                                 │
-   │   ${chalk.bold('ai-rules')} 설치 마법사           │
+   │   ${chalk.bold('ai-nexus')} 설치 마법사           │
    │                                 │
    ╰─────────────────────────────────╯
 `));

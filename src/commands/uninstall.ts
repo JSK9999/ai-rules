@@ -15,7 +15,7 @@ export async function uninstall(options: UninstallOptions = {}): Promise<void> {
   const install = detectInstall();
 
   if (!install && !options.global && !options.project) {
-    console.log('\n❌ No ai-rules installation found.\n');
+    console.log('\n❌ No ai-nexus installation found.\n');
     return;
   }
 
@@ -30,7 +30,7 @@ export async function uninstall(options: UninstallOptions = {}): Promise<void> {
   if (scope === 'global' || scope === 'both') {
     const home = os.homedir();
     const globalPaths = [
-      { path: path.join(home, '.ai-rules'), label: '.ai-rules', scope: 'global' },
+      { path: path.join(home, '.ai-nexus'), label: '.ai-nexus', scope: 'global' },
       { path: path.join(home, '.claude'), label: '.claude', scope: 'global' },
       { path: path.join(home, '.codex'), label: '.codex', scope: 'global' },
       { path: path.join(home, '.cursor'), label: '.cursor', scope: 'global' },
@@ -46,7 +46,7 @@ export async function uninstall(options: UninstallOptions = {}): Promise<void> {
   if (scope === 'project' || scope === 'both') {
     const cwd = process.cwd();
     const projectPaths = [
-      { path: path.join(cwd, '.ai-rules'), label: '.ai-rules', scope: 'project' },
+      { path: path.join(cwd, '.ai-nexus'), label: '.ai-nexus', scope: 'project' },
       { path: path.join(cwd, '.claude'), label: '.claude', scope: 'project' },
       { path: path.join(cwd, '.codex'), label: '.codex', scope: 'project' },
       { path: path.join(cwd, '.cursor'), label: '.cursor', scope: 'project' },

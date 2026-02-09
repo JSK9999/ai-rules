@@ -16,8 +16,8 @@ export async function test(input: string, options: TestOptions = {}): Promise<vo
   const install = detectInstall();
 
   if (!install) {
-    console.log(chalk.yellow('ai-rules가 설치되지 않았습니다.'));
-    console.log(chalk.gray('먼저 ai-rules init 또는 ai-rules install을 실행하세요.'));
+    console.log(chalk.yellow('ai-nexus가 설치되지 않았습니다.'));
+    console.log(chalk.gray('먼저 ai-nexus init 또는 ai-nexus install을 실행하세요.'));
     return;
   }
 

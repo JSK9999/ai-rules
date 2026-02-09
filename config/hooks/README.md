@@ -23,12 +23,12 @@ The semantic router hook analyzes keywords in prompts to **dynamically activate 
 
 ## Installation
 
-### 1. Auto-install with ai-rules
+### 1. Auto-install with ai-nexus
 
 ```bash
-npx ai-rules init
+npx ai-nexus init
 # or
-npx ai-rules install
+npx ai-nexus install
 
 # → Select hooks option
 ```
@@ -70,7 +70,7 @@ Add to `.claude/settings.json` or `~/.claude/settings.json`:
 ## Directory Structure
 
 ```
-~/.ai-rules/config/      ← Original rules (all)
+~/.ai-nexus/config/      ← Original rules (all)
 ~/.claude/rules/         ← Active rules (only needed)
 ~/.claude/rules-inactive/ ← Inactive rules
 ```

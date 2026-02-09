@@ -18,7 +18,7 @@ export async function remove(name: string): Promise<void> {
   const install = detectInstall();
 
   if (!install) {
-    console.log('\n❌ No ai-rules installation found.\n');
+    console.log('\n❌ No ai-nexus installation found.\n');
     process.exit(1);
   }
 

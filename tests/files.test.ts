@@ -5,7 +5,7 @@ import os from 'os';
 import { ensureDir, scanDir, compareConfigs } from '../src/utils/files.js';
 
 describe('File Utilities', () => {
-  const testDir = path.join(os.tmpdir(), 'ai-rules-test-' + Date.now());
+  const testDir = path.join(os.tmpdir(), 'ai-nexus-test-' + Date.now());
 
   beforeEach(() => {
     fs.mkdirSync(testDir, { recursive: true });

@@ -1,14 +1,14 @@
-# ai-rules
+# ai-nexus
 
 > Stop wasting tokens. Load only the rules you need.
 
 AI coding assistant rule manager for **Claude Code**, **Cursor**, and **Codex**.
 
-[![npm version](https://img.shields.io/npm/v/ai-rules.svg)](https://www.npmjs.com/package/ai-rules)
+[![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ```bash
-npx ai-rules install
+npx ai-nexus install
 ```
 
 ---
@@ -26,7 +26,7 @@ That's tokens wasted on React rules when you're asking about Git commits.
 
 ## The Solution
 
-**ai-rules** uses a semantic router to load only relevant rules:
+**ai-nexus** uses a semantic router to load only relevant rules:
 
 ```
 You: "Write a commit message"
@@ -46,13 +46,13 @@ Token cost: ~800 tokens (84% savings)
 
 ```bash
 # Interactive setup (recommended)
-npx ai-rules install -i
+npx ai-nexus install -i
 
 # Quick install with defaults
-npx ai-rules install
+npx ai-nexus install
 
 # Use your team's rules
-npx ai-rules install --rules github.com/your-org/team-rules
+npx ai-nexus install --rules github.com/your-org/team-rules
 ```
 
 ---
@@ -136,10 +136,10 @@ Share rules across your team via Git:
 
 ```bash
 # Everyone installs from the same source
-npx ai-rules install --rules github.com/acme/team-rules
+npx ai-nexus install --rules github.com/acme/team-rules
 
 # When rules are updated
-npx ai-rules update
+npx ai-nexus update
 ```
 
 ### Creating a Rules Repository
@@ -176,7 +176,7 @@ Your rule content...
 ### Symlink (default)
 
 ```bash
-npx ai-rules install
+npx ai-nexus install
 ```
 
 - Rules link to source → `update` syncs instantly
@@ -185,7 +185,7 @@ npx ai-rules install
 ### Copy
 
 ```bash
-npx ai-rules install --copy
+npx ai-nexus install --copy
 ```
 
 - Rules are independent copies
@@ -204,10 +204,10 @@ Your customizations are always safe:
 
 ```bash
 # This will NOT overwrite your custom commit.md
-npx ai-rules update
+npx ai-nexus update
 
 # This WILL overwrite everything
-npx ai-rules update --force
+npx ai-nexus update --force
 ```
 
 ---
@@ -215,7 +215,7 @@ npx ai-rules update --force
 ## Directory Structure
 
 ```
-.ai-rules/                    # ai-rules metadata
+.ai-nexus/                    # ai-nexus metadata
 ├── config/                   # Merged rules from all sources
 ├── sources/                  # Cloned Git repositories
 └── meta.json                 # Installation info
@@ -223,8 +223,8 @@ npx ai-rules update --force
 .claude/                      # Claude Code
 ├── hooks/semantic-router.cjs
 ├── settings.json
-├── rules/          → .ai-rules/config/rules
-└── commands/       → .ai-rules/config/commands
+├── rules/          → .ai-nexus/config/rules
+└── commands/       → .ai-nexus/config/commands
 
 .cursor/rules/                # Cursor (.mdc files)
 ├── essential.mdc
@@ -240,7 +240,7 @@ npx ai-rules update --force
 ### Personal Setup
 
 ```bash
-npx ai-rules install -i
+npx ai-nexus install -i
 # Select: Claude Code, Cursor
 # Select: rules, commands, hooks, settings
 # Template: React/Next.js
@@ -253,26 +253,26 @@ npx ai-rules install -i
 # 1. Create team rules repo on GitHub
 
 # 2. Each developer:
-npx ai-rules install --rules github.com/acme/team-rules
+npx ai-nexus install --rules github.com/acme/team-rules
 
 # 3. Weekly sync:
-npx ai-rules update
+npx ai-nexus update
 ```
 
 ### Multi-Source Setup
 
 ```bash
 # Base company rules
-npx ai-rules install --rules github.com/acme/base-rules
+npx ai-nexus install --rules github.com/acme/base-rules
 
 # Add frontend team rules
-npx ai-rules add github.com/acme/frontend-rules
+npx ai-nexus add github.com/acme/frontend-rules
 
 # Add security rules
-npx ai-rules add github.com/acme/security-rules
+npx ai-nexus add github.com/acme/security-rules
 
 # Update all at once
-npx ai-rules update
+npx ai-nexus update
 ```
 
 ---
@@ -282,7 +282,7 @@ npx ai-rules update
 Preview which rules would load for a given prompt:
 
 ```bash
-$ npx ai-rules test "write a react component with hooks"
+$ npx ai-nexus test "write a react component with hooks"
 
 Selected rules (3):
   • rules/essential.md
@@ -298,7 +298,7 @@ Selected rules (3):
 2. `npm install`
 3. Edit rules in `config/`
 4. `npm run build`
-5. Test: `node bin/ai-rules.cjs list`
+5. Test: `node bin/ai-nexus.cjs list`
 6. PR!
 
 ---

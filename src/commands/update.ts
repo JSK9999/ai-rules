@@ -27,8 +27,8 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   const install = detectInstall();
 
   if (!install) {
-    console.log('\n❌ No ai-rules installation found.');
-    console.log('   Run "ai-rules init" or "ai-rules install" first.\n');
+    console.log('\n❌ No ai-nexus installation found.');
+    console.log('   Run "ai-nexus init" or "ai-nexus install" first.\n');
     process.exit(1);
   }
 

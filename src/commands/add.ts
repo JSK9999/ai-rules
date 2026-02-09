@@ -23,8 +23,8 @@ export async function add(source: string, options: AddOptions): Promise<void> {
   const install = detectInstall();
 
   if (!install) {
-    console.log('\n❌ No ai-rules installation found.');
-    console.log('   Run "ai-rules init" or "ai-rules install" first.\n');
+    console.log('\n❌ No ai-nexus installation found.');
+    console.log('   Run "ai-nexus init" or "ai-nexus install" first.\n');
     process.exit(1);
   }
 
@@ -42,7 +42,7 @@ export async function add(source: string, options: AddOptions): Promise<void> {
 
   if (meta.sources.some(s => s.name === repoName)) {
     console.log(`❌ Source "${repoName}" already exists.`);
-    console.log('   Run "ai-rules update" to update it.\n');
+    console.log('   Run "ai-nexus update" to update it.\n');
     process.exit(1);
   }
 
@@ -100,5 +100,5 @@ export async function add(source: string, options: AddOptions): Promise<void> {
   fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
 
   console.log(`\n✅ Added ${addedCount} files from "${repoName}"`);
-  console.log('   Run "ai-rules update" to sync changes.\n');
+  console.log('   Run "ai-nexus update" to sync changes.\n');
 }
