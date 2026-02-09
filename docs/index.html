@@ -10,17 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --bg-secondary: #141414;
-      --bg-tertiary: #1a1a1a;
+      --bg: #09090b;
+      --bg-secondary: #111113;
+      --bg-tertiary: #1a1a1f;
       --text: #fafafa;
-      --text-secondary: #a1a1a1;
+      --text-secondary: #71717a;
+      --text-tertiary: #52525b;
       --accent: #3b82f6;
       --accent-hover: #60a5fa;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --purple: #a855f7;
       --green: #22c55e;
       --yellow: #eab308;
       --red: #ef4444;
-      --border: #262626;
+      --border: #1e1e23;
+      --border-hover: #2e2e36;
     }
 
     * {
@@ -33,18 +37,27 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.7;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 32px;
     }
 
-    /* Header */
+    /* ---- Header ---- */
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
       padding: 20px 0;
+      background: rgba(9, 9, 11, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
 
@@ -55,21 +68,23 @@
     }
 
     .logo {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: -0.02em;
     }
 
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 36px;
     }
 
     .nav-links a {
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      font-weight: 500;
       transition: color 0.2s;
     }
 
@@ -77,42 +92,76 @@
       color: var(--text);
     }
 
-    /* Hero */
+    /* ---- Hero ---- */
     .hero {
-      padding: 120px 0 80px;
+      position: relative;
+      padding: 180px 0 120px;
       text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.04) 40%, transparent 70%);
+      pointer-events: none;
     }
 
     .hero-badge {
-      display: inline-block;
-      padding: 6px 12px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 32px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
     }
 
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: 4rem;
       font-weight: 700;
       margin-bottom: 24px;
       line-height: 1.1;
+      letter-spacing: -0.03em;
     }
 
-    .hero h1 span {
-      background: linear-gradient(135deg, var(--accent), #a855f7);
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .hero p {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 40px;
+      max-width: 540px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
     }
 
     .hero-cta {
@@ -120,26 +169,33 @@
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
+      margin-bottom: 56px;
     }
 
+    /* ---- Buttons ---- */
     .btn {
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 0.95rem;
       font-weight: 500;
       text-decoration: none;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
       cursor: pointer;
       border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), #4f8ff7);
       color: white;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
     }
 
     .btn-primary:hover {
-      background: var(--accent-hover);
+      box-shadow: 0 0 32px rgba(59, 130, 246, 0.5);
+      transform: translateY(-1px);
     }
 
     .btn-secondary {
@@ -150,36 +206,73 @@
 
     .btn-secondary:hover {
       background: var(--bg-tertiary);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
     }
 
-    /* Code Block */
-    .code-block {
+    /* ---- Terminal Code Block ---- */
+    .terminal {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-body {
       padding: 20px 24px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem;
-      max-width: 500px;
-      margin: 40px auto 0;
-      text-align: left;
+      font-size: 0.9rem;
+      line-height: 1.8;
     }
 
-    .code-block .prompt {
-      color: var(--text-secondary);
+    .terminal-body .prompt { color: var(--text-tertiary); }
+    .terminal-body .command { color: var(--green); }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 18px;
+      background: var(--green);
+      vertical-align: text-bottom;
+      animation: blink-cursor 1s step-end infinite;
     }
 
-    .code-block .command {
-      color: var(--green);
+    @keyframes blink-cursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
-    /* Stats */
+    /* ---- Stats ---- */
     .stats {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-grid {
       display: flex;
       justify-content: center;
-      gap: 60px;
-      padding: 60px 0;
-      border-bottom: 1px solid var(--border);
+      gap: 80px;
+      flex-wrap: wrap;
     }
 
     .stat {
@@ -187,34 +280,51 @@
     }
 
     .stat-value {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 700;
-      color: var(--accent);
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .stat-label {
       color: var(--text-secondary);
-      font-size: 0.9rem;
-      margin-top: 4px;
+      font-size: 0.875rem;
+      margin-top: 8px;
+      font-weight: 500;
     }
 
-    /* Problem/Solution */
-    .problem-solution {
-      padding: 100px 0;
-    }
-
+    /* ---- Section Common ---- */
     .section-title {
-      font-size: 2rem;
+      font-size: 2.25rem;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 64px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ---- Problem / Solution ---- */
+    .problem-solution {
+      padding: 120px 0;
     }
 
     .comparison {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      max-width: 900px;
+      gap: 32px;
+      max-width: 880px;
       margin: 0 auto;
     }
 
@@ -222,200 +332,316 @@
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
+      padding: 36px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .comparison-card:hover {
+      border-color: var(--border-hover);
     }
 
     .comparison-card.before {
-      border-color: var(--red);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .comparison-card.before:hover {
+      border-color: rgba(239, 68, 68, 0.5);
+      box-shadow: 0 0 40px rgba(239, 68, 68, 0.05);
     }
 
     .comparison-card.after {
-      border-color: var(--green);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    .comparison-card.after:hover {
+      border-color: rgba(34, 197, 94, 0.5);
+      box-shadow: 0 0 40px rgba(34, 197, 94, 0.05);
     }
 
     .comparison-card h3 {
-      font-size: 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .comparison-card.before h3 {
-      color: var(--red);
-    }
-
-    .comparison-card.after h3 {
-      color: var(--green);
-    }
+    .comparison-card.before h3 { color: var(--red); }
+    .comparison-card.after h3 { color: var(--green); }
 
     .comparison-card pre {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-secondary);
       white-space: pre-wrap;
-      line-height: 1.8;
+      line-height: 1.9;
     }
 
-    .comparison-card .highlight {
-      color: var(--text);
-    }
+    .comparison-card .highlight { color: var(--text); }
 
-    /* Features */
+    /* ---- Features ---- */
     .features {
-      padding: 100px 0;
-      background: var(--bg-secondary);
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .features::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 50%, var(--bg) 100%);
+      pointer-events: none;
+    }
+
+    .features .container {
+      position: relative;
     }
 
     .features-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      margin-top: 60px;
+      gap: 24px;
     }
 
     .feature-card {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
+      padding: 36px 32px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 
     .feature-icon {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: var(--bg-tertiary);
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
     }
 
     .feature-card h3 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
       margin-bottom: 12px;
+      letter-spacing: -0.01em;
     }
 
     .feature-card p {
       color: var(--text-secondary);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+      line-height: 1.7;
     }
 
-    /* Tools */
+    /* ---- Tools ---- */
     .tools {
-      padding: 100px 0;
+      padding: 120px 0;
     }
 
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      margin-top: 60px;
     }
 
     .tool-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
+      padding: 40px 32px;
       text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .tool-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 
     .tool-card h3 {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
+      font-weight: 600;
       margin-bottom: 8px;
+      letter-spacing: -0.01em;
     }
 
     .tool-card .method {
-      color: var(--accent);
-      font-size: 0.9rem;
-      margin-bottom: 16px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
     }
 
     .tool-card .savings {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 700;
-      color: var(--green);
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--green), #4ade80);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .tool-card .savings-label {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      margin-top: 4px;
     }
 
-    /* Commands */
+    /* ---- Commands ---- */
     .commands {
-      padding: 100px 0;
-      background: var(--bg-secondary);
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .commands::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 50%, var(--bg) 100%);
+      pointer-events: none;
+    }
+
+    .commands .container {
+      position: relative;
     }
 
     .commands-list {
-      max-width: 700px;
-      margin: 60px auto 0;
+      max-width: 640px;
+      margin: 0 auto;
     }
 
     .command-item {
       display: flex;
+      align-items: center;
       gap: 24px;
-      padding: 20px 0;
+      padding: 18px 0;
       border-bottom: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .command-item:hover {
+      padding-left: 8px;
     }
 
     .command-item code {
       font-family: 'JetBrains Mono', monospace;
       background: var(--bg);
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.825rem;
       white-space: nowrap;
-      min-width: 180px;
+      min-width: 200px;
+      color: var(--accent);
     }
 
     .command-item span {
       color: var(--text-secondary);
+      font-size: 0.9rem;
     }
 
-    /* CTA */
+    /* ---- CTA ---- */
     .cta {
-      padding: 120px 0;
+      padding: 140px 0;
       text-align: center;
+      position: relative;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
+      pointer-events: none;
     }
 
     .cta h2 {
       font-size: 2.5rem;
+      font-weight: 700;
       margin-bottom: 16px;
+      letter-spacing: -0.02em;
     }
 
     .cta p {
       color: var(--text-secondary);
       font-size: 1.1rem;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
     }
 
-    /* Footer */
+    /* ---- Footer ---- */
     footer {
-      padding: 40px 0;
+      padding: 48px 0;
       border-top: 1px solid var(--border);
       text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      font-size: 0.85rem;
     }
 
     footer a {
       color: var(--text-secondary);
       text-decoration: none;
+      transition: color 0.2s;
     }
 
-    footer a:hover {
-      color: var(--text);
+    footer a:hover { color: var(--text); }
+
+    /* ---- Animations ---- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    /* Responsive */
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+
+    /* ---- Responsive ---- */
     @media (max-width: 768px) {
+      .hero {
+        padding: 140px 0 80px;
+      }
+
       .hero h1 {
         font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
       }
 
       .comparison,
@@ -424,13 +650,31 @@
         grid-template-columns: 1fr;
       }
 
-      .stats {
+      .stats-grid {
         flex-direction: column;
-        gap: 32px;
+        gap: 40px;
       }
 
       .nav-links {
         display: none;
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+      }
+
+      .command-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .command-item code {
+        min-width: auto;
+      }
+
+      .cta h2 {
+        font-size: 2rem;
       }
     }
   </style>
@@ -453,40 +697,50 @@
     <section class="hero">
       <div class="container">
         <div class="hero-badge">Open Source</div>
-        <h1>Stop wasting <span>tokens</span></h1>
+        <h1>Stop wasting <span class="gradient">tokens</span></h1>
         <p>AI coding assistant rule manager for Claude Code, Cursor, and Codex. Load only the rules you need.</p>
         <div class="hero-cta">
           <a href="https://github.com/JSK9999/ai-rules" class="btn btn-primary">Get Started</a>
           <a href="https://github.com/JSK9999/ai-rules#readme" class="btn btn-secondary">Documentation</a>
         </div>
-        <div class="code-block">
-          <span class="prompt">$</span> <span class="command">npx ai-nexus install</span>
+        <div class="terminal" id="hero-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+          </div>
+          <div class="terminal-body">
+            <span class="prompt">$</span> <span class="command" id="typed-command"></span><span class="typing-cursor" id="cursor"></span>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="stats">
-      <div class="container" style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap;">
-        <div class="stat">
-          <div class="stat-value">84%</div>
-          <div class="stat-label">Token Savings</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value">3</div>
-          <div class="stat-label">Supported Tools</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value">1</div>
-          <div class="stat-label">Command to Install</div>
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat fade-in">
+            <div class="stat-value" data-count="84" data-suffix="%">0%</div>
+            <div class="stat-label">Token Savings</div>
+          </div>
+          <div class="stat fade-in fade-in-delay-1">
+            <div class="stat-value" data-count="3" data-suffix="">0</div>
+            <div class="stat-label">Supported Tools</div>
+          </div>
+          <div class="stat fade-in fade-in-delay-2">
+            <div class="stat-value" data-count="1" data-suffix="">0</div>
+            <div class="stat-label">Command to Install</div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="problem-solution">
       <div class="container">
-        <h2 class="section-title">The Problem & Solution</h2>
+        <h2 class="section-title fade-in">The Problem & Solution</h2>
+        <p class="section-subtitle fade-in">See how ai-nexus transforms your token usage</p>
         <div class="comparison">
-          <div class="comparison-card before">
+          <div class="comparison-card before fade-in">
             <h3>Before</h3>
             <pre>
 Loading rules... <span class="highlight">4,300 lines</span>
@@ -498,7 +752,7 @@ Security rules for styling?
 
 <span class="highlight">Wasted tokens = Wasted money</span></pre>
           </div>
-          <div class="comparison-card after">
+          <div class="comparison-card after fade-in fade-in-delay-2">
             <h3>After</h3>
             <pre>
 You: "Write a commit message"
@@ -517,35 +771,36 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
 
     <section class="features">
       <div class="container">
-        <h2 class="section-title">Features</h2>
+        <h2 class="section-title fade-in">Features</h2>
+        <p class="section-subtitle fade-in">Everything you need for efficient rule management</p>
         <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">🧠</div>
+          <div class="feature-card fade-in">
+            <div class="feature-icon">&gt;_</div>
             <h3>Semantic Router</h3>
             <p>AI analyzes your prompt and loads only relevant rules. GPT-4o-mini or Claude Haiku for just ~$0.50/month.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔄</div>
+          <div class="feature-card fade-in fade-in-delay-1">
+            <div class="feature-icon">&lt;/&gt;</div>
             <h3>Team Sync</h3>
             <p>Share rules via Git repositories. Everyone stays in sync with a single update command.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🛡️</div>
+          <div class="feature-card fade-in fade-in-delay-2">
+            <div class="feature-icon">#</div>
             <h3>Local Priority</h3>
             <p>Your customizations are never overwritten. Only new files are added during updates.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">⚡</div>
+          <div class="feature-card fade-in fade-in-delay-3">
+            <div class="feature-icon">$</div>
             <h3>Zero Config</h3>
             <p>Works out of the box. Interactive setup guides you through the installation.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔗</div>
+          <div class="feature-card fade-in fade-in-delay-4">
+            <div class="feature-icon">~</div>
             <h3>Symlink Mode</h3>
             <p>Rules link to source. Updates sync instantly without overwriting anything.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🩺</div>
+          <div class="feature-card fade-in fade-in-delay-5">
+            <div class="feature-icon">?</div>
             <h3>Doctor Command</h3>
             <p>Diagnose your installation. See what's working and what needs attention.</p>
           </div>
@@ -555,21 +810,22 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
 
     <section class="tools">
       <div class="container">
-        <h2 class="section-title">Supported Tools</h2>
+        <h2 class="section-title fade-in">Supported Tools</h2>
+        <p class="section-subtitle fade-in">Works with the tools you already use</p>
         <div class="tools-grid">
-          <div class="tool-card">
+          <div class="tool-card fade-in">
             <h3>Claude Code</h3>
             <div class="method">Semantic Router</div>
             <div class="savings">~84%</div>
             <div class="savings-label">token savings</div>
           </div>
-          <div class="tool-card">
+          <div class="tool-card fade-in fade-in-delay-1">
             <h3>Cursor</h3>
             <div class="method">Semantic Search (.mdc)</div>
             <div class="savings">~70%</div>
             <div class="savings-label">token savings</div>
           </div>
-          <div class="tool-card">
+          <div class="tool-card fade-in fade-in-delay-2">
             <h3>Codex</h3>
             <div class="method">Static AGENTS.md</div>
             <div class="savings">-</div>
@@ -581,33 +837,34 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
 
     <section class="commands">
       <div class="container">
-        <h2 class="section-title">Commands</h2>
+        <h2 class="section-title fade-in">Commands</h2>
+        <p class="section-subtitle fade-in">Simple CLI for every workflow</p>
         <div class="commands-list">
-          <div class="command-item">
+          <div class="command-item fade-in">
             <code>ai-nexus install</code>
             <span>Install rules globally (~/.claude/)</span>
           </div>
-          <div class="command-item">
+          <div class="command-item fade-in fade-in-delay-1">
             <code>ai-nexus install -i</code>
             <span>Interactive mode - choose tools & rules</span>
           </div>
-          <div class="command-item">
+          <div class="command-item fade-in fade-in-delay-1">
             <code>ai-nexus init</code>
             <span>Install in current project</span>
           </div>
-          <div class="command-item">
+          <div class="command-item fade-in fade-in-delay-2">
             <code>ai-nexus update</code>
             <span>Sync latest rules (respects local changes)</span>
           </div>
-          <div class="command-item">
+          <div class="command-item fade-in fade-in-delay-2">
             <code>ai-nexus doctor</code>
             <span>Diagnose installation issues</span>
           </div>
-          <div class="command-item">
+          <div class="command-item fade-in fade-in-delay-3">
             <code>ai-nexus test &lt;prompt&gt;</code>
             <span>Preview which rules would load</span>
           </div>
-          <div class="command-item">
+          <div class="command-item fade-in fade-in-delay-3">
             <code>ai-nexus uninstall</code>
             <span>Clean removal</span>
           </div>
@@ -617,10 +874,17 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
 
     <section class="cta">
       <div class="container">
-        <h2>Ready to save tokens?</h2>
-        <p>Get started in seconds with a single command.</p>
-        <div class="code-block" style="margin: 0 auto;">
-          <span class="prompt">$</span> <span class="command">npx ai-nexus install -i</span>
+        <h2 class="fade-in">Ready to save tokens?</h2>
+        <p class="fade-in">Get started in seconds with a single command.</p>
+        <div class="terminal fade-in" style="margin: 0 auto;">
+          <div class="terminal-header">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+          </div>
+          <div class="terminal-body">
+            <span class="prompt">$</span> <span class="command">npx ai-nexus install -i</span>
+          </div>
         </div>
       </div>
     </section>
@@ -629,11 +893,88 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
   <footer>
     <div class="container">
       <p>
-        Apache 2.0 License ·
-        <a href="https://github.com/JSK9999/ai-rules">GitHub</a> ·
+        Apache 2.0 License &middot;
+        <a href="https://github.com/JSK9999/ai-rules">GitHub</a> &middot;
         <a href="https://www.npmjs.com/package/ai-nexus">npm</a>
       </p>
     </div>
   </footer>
+
+  <script>
+    /* ---- Intersection Observer: Fade-in on scroll ---- */
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.fade-in').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+
+    /* ---- Typing Effect ---- */
+    (function () {
+      var text = 'npx ai-nexus install';
+      var el = document.getElementById('typed-command');
+      var cursor = document.getElementById('cursor');
+      var i = 0;
+
+      function type() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 60 + Math.random() * 40);
+        } else {
+          setTimeout(function () { cursor.style.display = 'none'; }, 2000);
+        }
+      }
+
+      setTimeout(type, 800);
+    })();
+
+    /* ---- Count-up Animation ---- */
+    (function () {
+      var counted = false;
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting && !counted) {
+            counted = true;
+            document.querySelectorAll('[data-count]').forEach(function (el) {
+              var target = parseInt(el.getAttribute('data-count'), 10);
+              var suffix = el.getAttribute('data-suffix') || '';
+              var current = 0;
+              var step = Math.max(1, Math.floor(target / 30));
+              var duration = 800;
+              var interval = duration / (target / step);
+
+              function update() {
+                current += step;
+                if (current >= target) {
+                  current = target;
+                  el.textContent = current + suffix;
+                  return;
+                }
+                el.textContent = current + suffix;
+                setTimeout(update, interval);
+              }
+
+              update();
+            });
+          }
+        });
+      }, { threshold: 0.3 });
+
+      var statsSection = document.querySelector('.stats');
+      if (statsSection) {
+        observer.observe(statsSection);
+      }
+    })();
+  </script>
 </body>
 </html>
