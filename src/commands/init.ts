@@ -12,6 +12,7 @@ import {
   scanDir,
 } from '../utils/files.js';
 import { cloneRepo, getRepoName, normalizeGitUrl } from '../utils/git.js';
+import type { DotrulesMeta } from '../types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = path.resolve(__dirname, '../..');
@@ -21,18 +22,6 @@ interface InitOptions {
   scope: 'project' | 'global';
   rules?: string;
   copy?: boolean;
-}
-
-interface DotrulesMeta {
-  version: string;
-  mode: 'symlink' | 'copy';
-  sources: Array<{
-    name: string;
-    url?: string;
-    type: 'builtin' | 'external';
-  }>;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface InstallResult {

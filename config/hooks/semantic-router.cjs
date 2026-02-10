@@ -6,10 +6,10 @@ const https = require('https');
 const os = require('os');
 const RULES_DIR = path.join(os.homedir(), '.claude/rules');
 const INACTIVE_DIR = path.join(os.homedir(), '.claude/rules-inactive');
-const SEMANTIC_ROUTER_ENABLED = process.env.SEMANTIC_ROUTER_ENABLED !== 'false'; // Default to true unless explicitly disabled
+const SEMANTIC_ROUTER_ENABLED = process.env.SEMANTIC_ROUTER_ENABLED !== 'false';
 
-// Map file names to keywords for fallback and management identification
-const KEYWORD_MAP = {
+// Static keyword map (fallback for files without frontmatter)
+const STATIC_KEYWORD_MAP = {
   'testing.md': ['test', 'spec', 'jest', 'vitest', 'unit', 'e2e'],
   'typescript.md': ['ts', 'typescript', 'interface', 'type'],
   'react.md': ['react', 'component', 'jsx', 'tsx', 'hook'],
@@ -20,7 +20,67 @@ const KEYWORD_MAP = {
   'commit.md': ['commit', 'git', 'message', 'convention'],
 };
 
-const ALWAYS_ACTIVE = ['essential.md', 'security.md']; // Files that are always kept active
+const ALWAYS_ACTIVE = ['essential.md', 'security.md'];
+
+// Build keyword map dynamically by scanning rule files
+function buildKeywordMap() {
+  const keywordMap = { ...STATIC_KEYWORD_MAP };
+  const dirs = [RULES_DIR, INACTIVE_DIR];
+
+  for (const dir of dirs) {
+    if (!fs.existsSync(dir)) continue;
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
+
+    for (const file of files) {
+      if (keywordMap[file]) continue; // static map takes precedence
+      if (ALWAYS_ACTIVE.includes(file)) continue;
+
+      const filePath = path.join(dir, file);
+      const keywords = extractKeywords(filePath, file);
+      if (keywords.length > 0) {
+        keywordMap[file] = keywords;
+      }
+    }
+  }
+
+  return keywordMap;
+}
+
+// Extract keywords from frontmatter description and filename
+function extractKeywords(filePath, filename) {
+  const keywords = [];
+
+  // Add filename-based keyword (without .md)
+  const baseName = filename.replace('.md', '').toLowerCase();
+  keywords.push(baseName);
+  // Add hyphen-split parts (e.g. "code-thresholds" -> "code", "thresholds")
+  if (baseName.includes('-')) {
+    baseName.split('-').forEach(part => {
+      if (part.length > 2) keywords.push(part);
+    });
+  }
+
+  // Parse frontmatter description for additional keywords
+  try {
+    const content = fs.readFileSync(filePath, 'utf8').slice(0, 500);
+    const match = content.match(/^---\n[\s\S]*?description:\s*(.+)\n[\s\S]*?---/);
+    if (match) {
+      const desc = match[1].toLowerCase();
+      // Extract meaningful words (3+ chars, no common stop words)
+      const stopWords = ['the', 'and', 'for', 'with', 'that', 'this', 'from', 'are', 'was', 'not'];
+      const words = desc.match(/[a-z]{3,}/g) || [];
+      words.forEach(w => {
+        if (!stopWords.includes(w) && !keywords.includes(w)) {
+          keywords.push(w);
+        }
+      });
+    }
+  } catch (e) {
+    // Ignore read errors
+  }
+
+  return keywords;
+}
 
 // Helper: Ensure directories exist
 function ensureDirs() {
@@ -77,9 +137,7 @@ Example: ["react.md", "typescript.md"]
         }
       });
     });
-    req.on('error', (e) => {
-      resolve(null);
-    });
+    req.on('error', () => resolve(null));
     req.write(data);
     req.end();
   });
@@ -126,7 +184,6 @@ Example: ["react.md", "typescript.md"]
           const response = JSON.parse(body);
           const content = response.choices?.[0]?.message?.content;
           if (content) {
-            // OpenAI JSON mode might return { "files": [...] } or just [...]
             const parsed = JSON.parse(content);
             const files = Array.isArray(parsed) ? parsed : (parsed.files || []);
             resolve(files);
@@ -138,19 +195,17 @@ Example: ["react.md", "typescript.md"]
         }
       });
     });
-    req.on('error', (e) => {
-      resolve(null);
-    });
+    req.on('error', () => resolve(null));
     req.write(data);
     req.end();
   });
 }
 
 // Helper: Keyword fallback
-function selectByKeywords(prompt) {
+function selectByKeywords(prompt, keywordMap) {
   const selected = [];
   const lowerPrompt = prompt.toLowerCase();
-  for (const [file, keywords] of Object.entries(KEYWORD_MAP)) {
+  for (const [file, keywords] of Object.entries(keywordMap)) {
     if (keywords.some(k => lowerPrompt.includes(k))) {
       selected.push(file);
     }
@@ -163,65 +218,59 @@ async function route(userPrompt) {
   try {
     ensureDirs();
 
+    // Build dynamic keyword map from actual rule files
+    const keywordMap = buildKeywordMap();
+
     // 1. Identify all managed files (active + inactive)
     let activeFiles = [];
     try { activeFiles = fs.readdirSync(RULES_DIR).filter(f => f.endsWith('.md')); } catch(e) {}
     let inactiveFiles = [];
     try { inactiveFiles = fs.readdirSync(INACTIVE_DIR).filter(f => f.endsWith('.md')); } catch(e) {}
 
-    // Managed files are those in KEYWORD_MAP
-    const allManagedFiles = Object.keys(KEYWORD_MAP);
+    const allManagedFiles = Object.keys(keywordMap);
 
     // 2. Determine desired active files
     let desiredFiles = [...ALWAYS_ACTIVE];
 
-    // Try AI routing if enabled
     const available = [...new Set([...activeFiles, ...inactiveFiles, ...allManagedFiles])];
 
     let aiSelected = null;
     if (SEMANTIC_ROUTER_ENABLED) {
-        // Try OpenAI first
-        aiSelected = await analyzeWithOpenAI(userPrompt, available);
-
-        // If OpenAI fails or key is missing, try Claude
-        if (!aiSelected) {
-            aiSelected = await analyzeWithClaude(userPrompt, available);
-        }
+      aiSelected = await analyzeWithOpenAI(userPrompt, available);
+      if (!aiSelected) {
+        aiSelected = await analyzeWithClaude(userPrompt, available);
+      }
     }
 
     if (aiSelected) {
-        desiredFiles.push(...aiSelected);
+      desiredFiles.push(...aiSelected);
     } else {
-        // Fallback to keywords
-        desiredFiles.push(...selectByKeywords(userPrompt));
+      desiredFiles.push(...selectByKeywords(userPrompt, keywordMap));
     }
 
-    // Deduplicate
     desiredFiles = [...new Set(desiredFiles)];
 
-    // 3. Execution: Swap files
-    // Move unwanted managed files to inactive
+    // 3. Swap files
     for (const file of activeFiles) {
-        if (KEYWORD_MAP[file] && !desiredFiles.includes(file) && !ALWAYS_ACTIVE.includes(file)) {
-            const src = path.join(RULES_DIR, file);
-            const dest = path.join(INACTIVE_DIR, file);
-            if (fs.existsSync(src)) {
-                fs.renameSync(src, dest);
-                console.log(`[Router] Deactivated: ${file}`);
-            }
+      if (keywordMap[file] && !desiredFiles.includes(file) && !ALWAYS_ACTIVE.includes(file)) {
+        const src = path.join(RULES_DIR, file);
+        const dest = path.join(INACTIVE_DIR, file);
+        if (fs.existsSync(src)) {
+          fs.renameSync(src, dest);
+          console.log(`[Router] Deactivated: ${file}`);
         }
+      }
     }
 
-    // Move wanted files to active
     for (const file of desiredFiles) {
-        if (allManagedFiles.includes(file)) {
-             const inactivePath = path.join(INACTIVE_DIR, file);
-             const activePath = path.join(RULES_DIR, file);
-             if (fs.existsSync(inactivePath)) {
-                 fs.renameSync(inactivePath, activePath);
-                 console.log(`[Router] Activated: ${file}`);
-             }
+      if (allManagedFiles.includes(file)) {
+        const inactivePath = path.join(INACTIVE_DIR, file);
+        const activePath = path.join(RULES_DIR, file);
+        if (fs.existsSync(inactivePath)) {
+          fs.renameSync(inactivePath, activePath);
+          console.log(`[Router] Activated: ${file}`);
         }
+      }
     }
 
   } catch (error) {

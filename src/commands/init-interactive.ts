@@ -13,6 +13,7 @@ import {
   scanDir,
 } from '../utils/files.js';
 import { scanConfigDir, type ConfigFile } from '../utils/config-scanner.js';
+import type { DotrulesMeta } from '../types.js';
 
 // Convert .md to .mdc format for Cursor
 function convertToMdc(content: string, filename: string): string {
@@ -43,21 +44,6 @@ interface Selections {
   selectedFiles: Record<string, string[]>;
   template: string | null;
   method: 'symlink' | 'copy';
-}
-
-interface DotrulesMeta {
-  version: string;
-  mode: 'symlink' | 'copy';
-  tools: string[];
-  template: string | null;
-  sources: Array<{
-    name: string;
-    url?: string;
-    type: 'builtin' | 'external';
-  }>;
-  selectedFiles?: Record<string, string[]>;
-  createdAt: string;
-  updatedAt: string;
 }
 
 const TEMPLATES = [

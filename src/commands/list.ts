@@ -3,18 +3,7 @@ import path from 'path';
 import chalk from 'chalk';
 import { detectInstall } from '../utils/files.js';
 import { scanConfigDir } from '../utils/config-scanner.js';
-
-interface DotrulesMeta {
-  version: string;
-  mode: 'symlink' | 'copy';
-  sources: Array<{
-    name: string;
-    url?: string;
-    type: 'builtin' | 'external';
-  }>;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { DotrulesMeta } from '../types.js';
 
 export async function list(): Promise<void> {
   const install = detectInstall();

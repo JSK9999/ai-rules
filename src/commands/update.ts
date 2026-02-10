@@ -1,21 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { detectInstall, scanDir, compareConfigs, ensureDir } from '../utils/files.js';
 import { updateRepo } from '../utils/git.js';
-
-interface DotrulesMeta {
-  version: string;
-  mode: 'symlink' | 'copy';
-  sources: Array<{
-    name: string;
-    url?: string;
-    type: 'builtin' | 'external';
-  }>;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { DotrulesMeta } from '../types.js';
 
 export interface UpdateOptions {
   force?: boolean;      // 모든 파일 덮어쓰기
@@ -72,9 +62,18 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   // Sync config to .claude/
   const configDir = path.join(configPath, 'config');
   const targetDir = scope === 'global'
-    ? require('os').homedir()
+    ? os.homedir()
     : process.cwd();
   const claudeDir = path.join(targetDir, '.claude');
+
+  if (meta.mode === 'symlink') {
+    const hasExternal = meta.sources.some(s => s.type === 'external');
+    if (!hasExternal && !hasChanges) {
+      console.log(chalk.gray('  Symlink mode with built-in rules only.'));
+      console.log(chalk.gray('  Built-in rules update when you run:'));
+      console.log(chalk.bold('    npm update -g ai-nexus\n'));
+    }
+  }
 
   if (meta.mode === 'copy') {
     // Copy mode: compare and update files
@@ -187,7 +186,7 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   meta.updatedAt = new Date().toISOString();
   fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
 
-  if (hasChanges || meta.mode === 'symlink') {
+  if (hasChanges) {
     console.log('\n✅ Update complete!\n');
   } else {
     console.log('\n✅ Already up to date!\n');
