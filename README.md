@@ -1,3 +1,5 @@
+[한국어](README.ko.md) | **English**
+
 # ai-nexus
 
 > Stop wasting tokens. Load only the rules you need.
