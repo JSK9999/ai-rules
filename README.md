@@ -125,8 +125,12 @@ A single `AGENTS.md` file is loaded at session start. No dynamic loading.
 | `update` | Sync latest rules (respects local changes) |
 | `list` | Show installed rules |
 | `test <prompt>` | Preview which rules would load |
+| `search [keyword]` | Search community rules from the registry |
+| `get <filename>` | Download a rule from the community registry |
 | `add <url>` | Add rules from a Git repository |
 | `remove <name>` | Remove a rule source |
+| `doctor` | Diagnose installation issues |
+| `uninstall` | Remove ai-nexus installation |
 
 ---
 
@@ -277,6 +281,40 @@ npx ai-nexus update
 
 ---
 
+## Community Registry
+
+Browse and download community-contributed rules directly from GitHub — no `npm publish` needed.
+
+```bash
+# List all available rules
+npx ai-nexus search
+
+# Search by keyword
+npx ai-nexus search react
+```
+
+```
+  Results for "react":
+
+  skills/
+    react.md - React/Next.js best practices
+
+  1 file(s) found.
+  Use "ai-nexus get <filename>" to download.
+```
+
+```bash
+# Download a rule
+npx ai-nexus get react.md
+
+# Specify category when name exists in multiple
+npx ai-nexus get commit.md --category commands
+```
+
+Rules are downloaded from the [latest GitHub repo](https://github.com/JSK9999/ai-rules/tree/main/config) to `~/.claude/`. Anyone can contribute new rules via PR — they become available to `search` and `get` immediately after merge.
+
+---
+
 ## Testing
 
 Preview which rules would load for a given prompt:
@@ -294,7 +332,7 @@ Selected rules (3):
 
 ## Contributing
 
-We welcome rule contributions! The easiest way to contribute:
+We welcome rule contributions! Contributed rules are instantly available via `ai-nexus search` and `ai-nexus get` — no npm publish needed.
 
 1. **Suggest a rule**: [Open a Rule Request](https://github.com/JSK9999/ai-rules/issues/new?template=rule-request.yml)
 2. **Submit a rule**: See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide
@@ -303,6 +341,7 @@ We welcome rule contributions! The easiest way to contribute:
 # Quick start for contributors
 git clone https://github.com/JSK9999/ai-rules.git
 cd ai-rules && npm install && npm run build
+
 # Add your rule to config/rules/, then test:
 node bin/ai-rules.cjs test "your prompt"
 ```
