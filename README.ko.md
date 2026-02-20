@@ -9,6 +9,8 @@
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+**[홈페이지](https://jsk9999.github.io/ai-nexus/)** | **[문서](https://jsk9999.github.io/ai-nexus/docs.html)**
+
 ```bash
 npx ai-nexus install
 ```
