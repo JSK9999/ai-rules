@@ -286,7 +286,7 @@ npx ai-nexus update
 
 ## 룰 마켓플레이스
 
-![browse](docs/browse.png)
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/browse.png)
 
 웹 기반 마켓플레이스에서 룰을 검색, 설치, 제거할 수 있습니다:
 

@@ -286,7 +286,7 @@ npx ai-nexus update
 
 ## Rule Marketplace
 
-![browse](docs/browse.png)
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/browse.png)
 
 Open the web-based marketplace to search, install, and remove rules with one click:
 
