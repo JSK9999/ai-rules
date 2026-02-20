@@ -801,8 +801,8 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
           </div>
           <div class="feature-card fade-in fade-in-delay-5">
             <div class="feature-icon">@</div>
-            <h3>Community Registry</h3>
-            <p>Search and download community rules from GitHub. No npm publish needed — PRs go live instantly.</p>
+            <h3>Rule Marketplace</h3>
+            <p>Browse, search, install, and remove community rules from a web UI. One command: <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px;font-size:0.8rem">ai-nexus browse</code></p>
           </div>
         </div>
       </div>
@@ -861,12 +861,12 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
             <span>Diagnose installation issues</span>
           </div>
           <div class="command-item fade-in fade-in-delay-3">
-            <code>ai-nexus search [keyword]</code>
-            <span>Search community rules from registry</span>
+            <code>ai-nexus browse</code>
+            <span>Open rule marketplace in browser</span>
           </div>
           <div class="command-item fade-in fade-in-delay-3">
-            <code>ai-nexus get &lt;filename&gt;</code>
-            <span>Download a rule from the registry</span>
+            <code>ai-nexus search [keyword]</code>
+            <span>Search community rules from registry</span>
           </div>
           <div class="command-item fade-in fade-in-delay-4">
             <code>ai-nexus test &lt;prompt&gt;</code>
@@ -875,6 +875,28 @@ Token cost: <span class="highlight">~800 tokens</span></pre>
           <div class="command-item fade-in fade-in-delay-4">
             <code>ai-nexus doctor</code>
             <span>Diagnose installation issues</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" style="padding:80px 0 120px">
+      <div class="container" style="position:relative">
+        <h2 class="section-title fade-in">Rule Marketplace</h2>
+        <p class="section-subtitle fade-in">Browse, install, and manage rules from your browser</p>
+        <div class="fade-in" style="max-width:960px;margin:0 auto;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,0.4)">
+          <img src="browse.png" alt="ai-nexus browse marketplace" style="width:100%;display:block">
+        </div>
+        <div style="text-align:center;margin-top:32px">
+          <div class="terminal fade-in" style="margin:0 auto;max-width:360px">
+            <div class="terminal-header">
+              <div class="terminal-dot red"></div>
+              <div class="terminal-dot yellow"></div>
+              <div class="terminal-dot green"></div>
+            </div>
+            <div class="terminal-body">
+              <span class="prompt">$</span> <span class="command">npx ai-nexus browse</span>
+            </div>
           </div>
         </div>
       </div>
