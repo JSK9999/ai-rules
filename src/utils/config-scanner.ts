@@ -16,11 +16,11 @@ export interface CategoryInfo {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  rules: '코딩 규칙',
-  commands: '슬래시 커맨드',
-  skills: 'AI 스킬',
-  agents: '서브에이전트',
-  contexts: '컨텍스트',
+  rules: 'Coding Rules',
+  commands: 'Slash Commands',
+  skills: 'AI Skills',
+  agents: 'Sub-Agents',
+  contexts: 'Contexts',
   hooks: 'Semantic Router Hook',
 };
 
