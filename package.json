@@ -1,6 +1,6 @@
 {
   "name": "ai-nexus",
-  "version": "1.3.10",
+  "version": "1.3.11",
   "description": "AI coding assistant rule manager for Claude Code, Codex, and Cursor",
   "main": "dist/index.js",
   "bin": {
