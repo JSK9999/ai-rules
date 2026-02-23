@@ -101,9 +101,6 @@ OPENAI_API_KEY=sk-xxx
 ANTHROPIC_API_KEY=sk-ant-xxx
 ```
 
-## Token Savings
+## Token Efficiency
 
-| Method | Rules Loaded |
-|--------|--------------|
-| Load all | All 30+ rules |
-| Semantic Router | Only needed (2-3) |
+Add as many rules as you need — the Semantic Router loads only the relevant ones per prompt, so token usage stays minimal regardless of how many rules you have.

@@ -41,7 +41,7 @@ Semantic Router activates:
   ✗ react.md (skipped)
   ✗ security.md (skipped)
 
-Loads 2-3 of 30+ rules per prompt
+Add as many rules as you want — only the relevant ones are loaded.
 ```
 
 ---
@@ -77,11 +77,11 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 ## Supported Tools
 
-| Tool | How it works | Loaded per prompt |
-|------|--------------|-------------------|
-| **Claude Code** | Semantic Router dynamically swaps rules per prompt | 2-3 of 30+ rules |
+| Tool | How it works | Token overhead |
+|------|--------------|----------------|
+| **Claude Code** | Semantic Router dynamically swaps rules per prompt | Only relevant rules loaded |
 | **Cursor** | Semantic Search via `.mdc` description fields | Description-based filtering |
-| **Codex** | Static `AGENTS.md` (no dynamic loading) | All (static) |
+| **Codex** | Static `AGENTS.md` (no dynamic loading) | All rules loaded |
 
 ---
 

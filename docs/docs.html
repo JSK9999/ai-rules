@@ -165,11 +165,11 @@
       <!-- Supported Tools -->
       <h2 id="supported-tools">Supported Tools</h2>
       <table>
-        <thead><tr><th>Tool</th><th>Method</th><th>Loaded per prompt</th></tr></thead>
+        <thead><tr><th>Tool</th><th>Method</th><th>Token overhead</th></tr></thead>
         <tbody>
-          <tr><td><strong>Claude Code</strong></td><td>Semantic Router dynamically swaps rules per prompt</td><td>2-3 of 30+ rules</td></tr>
+          <tr><td><strong>Claude Code</strong></td><td>Semantic Router dynamically swaps rules per prompt</td><td>Only relevant rules loaded</td></tr>
           <tr><td><strong>Cursor</strong></td><td>Semantic Search via <code>.mdc</code> description fields</td><td>Description-based filtering</td></tr>
-          <tr><td><strong>Codex</strong></td><td>Static <code>AGENTS.md</code> (no dynamic loading)</td><td>All (static)</td></tr>
+          <tr><td><strong>Codex</strong></td><td>Static <code>AGENTS.md</code> (no dynamic loading)</td><td>All rules loaded</td></tr>
         </tbody>
       </table>
 
