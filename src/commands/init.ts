@@ -211,8 +211,10 @@ function printSummary(
   // Getting started guide
   console.log(chalk.bold('\n  Getting Started:\n'));
   console.log('  1. Enable AI routing (optional but recommended):');
-  console.log(chalk.gray('     export ANTHROPIC_API_KEY=sk-ant-...  # or OPENAI_API_KEY'));
-  console.log(chalk.gray('     Rules are selected per-prompt. ~$0.50/month.\n'));
+  console.log(chalk.gray('     Add to ~/.zshrc or ~/.bashrc:'));
+  console.log(chalk.gray('       export SEMANTIC_ROUTER_ENABLED=true'));
+  console.log(chalk.gray('       export OPENAI_API_KEY=sk-...   # or ANTHROPIC_API_KEY'));
+  console.log(chalk.gray('     Cost: ~$0.50/month (GPT-4o-mini or Claude Haiku)\n'));
   console.log('  2. Verify installation:');
   console.log(chalk.gray('     ai-nexus doctor\n'));
   console.log('  3. See installed rules:');

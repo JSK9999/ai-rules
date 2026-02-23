@@ -264,9 +264,25 @@ export async function initInteractive(): Promise<void> {
   }
   console.log(chalk.gray('─'.repeat(40)));
 
+  // Next steps
+  console.log(chalk.cyan('\n📋 Next Steps:\n'));
+
   if (method === 'symlink') {
-    console.log(chalk.cyan('\n💡 Tip: Run "ai-nexus update" to sync latest rules\n'));
+    console.log(chalk.white('  1. Run "ai-nexus update" to sync latest rules'));
   }
+
+  const hasApiKey = !!(process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY);
+  if (!hasApiKey && tools.includes('claude') && categories.includes('hooks')) {
+    console.log(chalk.white('  2. Enable AI-powered rule selection (optional):'));
+    console.log(chalk.gray('     Add to ~/.zshrc or ~/.bashrc:'));
+    console.log(chalk.gray('       export SEMANTIC_ROUTER_ENABLED=true'));
+    console.log(chalk.gray('       export OPENAI_API_KEY=sk-...   # or ANTHROPIC_API_KEY'));
+    console.log(chalk.gray('     Cost: ~$0.50/month (GPT-4o-mini or Claude Haiku)'));
+  }
+
+  console.log(chalk.white(`  ${hasApiKey ? '2' : '3'}. Run "ai-nexus doctor" to verify setup`));
+  console.log(chalk.white(`  ${hasApiKey ? '3' : '4'}. Run "ai-nexus browse" to explore community rules`));
+  console.log();
 }
 
 async function install(selections: Selections): Promise<void> {
