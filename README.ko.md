@@ -49,15 +49,29 @@ Semantic Router 활성화:
 ## 빠른 시작
 
 ```bash
-# 대화형 설치 (권장)
-npx ai-nexus install -i
+# 대화형 설치 마법사 (기본값)
+npx ai-nexus install
 
 # 기본값으로 빠른 설치
-npx ai-nexus install
+npx ai-nexus install -q
 
 # 팀 룰 사용
 npx ai-nexus install --rules github.com/your-org/team-rules
 ```
+
+### 데모
+
+**설치 마법사**
+
+![init](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-init.gif)
+
+**설치된 룰 목록**
+
+![list](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-list.gif)
+
+**룰 마켓플레이스**
+
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-browse.gif)
 
 ---
 
@@ -123,8 +137,8 @@ Cursor의 내장 시맨틱 서치가 관련도에 따라 룰을 로드합니다.
 
 | 명령어 | 설명 |
 |--------|------|
-| `install` | 전역 설치 (`~/.claude/`) |
-| `install -i` | 대화형 모드 - 도구, 룰, 템플릿 선택 |
+| `install` | 전역 설치 (대화형 마법사) |
+| `install -q` | 기본값으로 빠른 설치 |
 | `init` | 현재 프로젝트에 설치 (`.claude/`) |
 | `update` | 최신 룰로 동기화 (로컬 변경 보호) |
 | `list` | 설치된 룰 목록 |
@@ -249,7 +263,7 @@ npx ai-nexus update --force
 ### 개인 설정
 
 ```bash
-npx ai-nexus install -i
+npx ai-nexus install
 # 선택: Claude Code, Cursor
 # 선택: rules, commands, hooks, settings
 # 템플릿: React/Next.js

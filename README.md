@@ -49,15 +49,29 @@ Token cost: ~800 tokens (84% savings)
 ## Quick Start
 
 ```bash
-# Interactive setup (recommended)
-npx ai-nexus install -i
+# Interactive setup wizard (default)
+npx ai-nexus install
 
 # Quick install with defaults
-npx ai-nexus install
+npx ai-nexus install -q
 
 # Use your team's rules
 npx ai-nexus install --rules github.com/your-org/team-rules
 ```
+
+### Demo
+
+**Setup Wizard**
+
+![init](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-init.gif)
+
+**Installed Rules**
+
+![list](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-list.gif)
+
+**Rule Marketplace**
+
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-browse.gif)
 
 ---
 
@@ -123,8 +137,8 @@ A single `AGENTS.md` file is loaded at session start. No dynamic loading.
 
 | Command | Description |
 |---------|-------------|
-| `install` | Install rules globally (`~/.claude/`) |
-| `install -i` | Interactive mode - choose tools, rules, template |
+| `install` | Install rules globally (interactive wizard) |
+| `install -q` | Quick install with defaults |
 | `init` | Install in current project (`.claude/`) |
 | `update` | Sync latest rules (respects local changes) |
 | `list` | Show installed rules |
@@ -249,7 +263,7 @@ npx ai-nexus update --force
 ### Personal Setup
 
 ```bash
-npx ai-nexus install -i
+npx ai-nexus install
 # Select: Claude Code, Cursor
 # Select: rules, commands, hooks, settings
 # Template: React/Next.js
