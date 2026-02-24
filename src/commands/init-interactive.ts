@@ -12,6 +12,7 @@ import {
   createSymlink,
   scanDir,
   computeFileHashes,
+  aggregateToAgentsMd,
 } from '../utils/files.js';
 import { scanConfigDir, type ConfigFile } from '../utils/config-scanner.js';
 import type { DotrulesMeta } from '../types.js';
@@ -448,13 +449,13 @@ async function install(selections: Selections): Promise<void> {
       }
     }
 
-    // Copy AGENTS.md for Codex
+    // Generate aggregated AGENTS.md for Codex
     if (tool === 'codex') {
-      const agentsFile = path.join(builtinConfigDir, 'codex', 'AGENTS.md');
       const destAgents = path.join(toolDir, 'AGENTS.md');
       // Local priority: skip if file exists
-      if (!fs.existsSync(destAgents) && fs.existsSync(agentsFile)) {
-        fs.copyFileSync(agentsFile, destAgents);
+      if (!fs.existsSync(destAgents)) {
+        const content = aggregateToAgentsMd(configDir, selectedFiles);
+        fs.writeFileSync(destAgents, content);
       }
     }
   }

@@ -187,7 +187,7 @@
         <tbody>
           <tr><td><strong>Claude Code</strong></td><td>Semantic Router dynamically swaps rules per prompt</td><td>Only relevant rules loaded</td></tr>
           <tr><td><strong>Cursor</strong></td><td>Converts rules to <code>.mdc</code> format; Cursor's built-in search handles filtering</td><td>Depends on Cursor's search</td></tr>
-          <tr><td><strong>Codex</strong></td><td>Static <code>AGENTS.md</code> (no dynamic loading)</td><td>All rules loaded</td></tr>
+          <tr><td><strong>Codex</strong></td><td>Aggregated <code>AGENTS.md</code> (rules merged into single file)</td><td>All rules loaded</td></tr>
         </tbody>
       </table>
 
@@ -258,8 +258,8 @@ Selected rules (3):
       <h3>Cursor: Rule Converter</h3>
       <p>ai-nexus converts <code>.md</code> rules to Cursor's <code>.mdc</code> format, adding <code>description</code> and <code>alwaysApply</code> metadata automatically. After conversion, Cursor's built-in semantic search handles rule filtering &mdash; ai-nexus does not run a router for Cursor.</p>
 
-      <h3>Codex: Static Rules</h3>
-      <p>A single <code>AGENTS.md</code> file is loaded at session start. No dynamic loading.</p>
+      <h3>Codex: Aggregated Rules</h3>
+      <p>Individual rule files are aggregated into a single <code>AGENTS.md</code> file, which is loaded at session start. No dynamic loading.</p>
 
       <!-- Directory Structure -->
       <h2 id="directory-structure">Directory Structure</h2>

@@ -90,7 +90,7 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 |------|--------------|----------------|
 | **Claude Code** | Semantic Router dynamically swaps rules per prompt | Only relevant rules loaded |
 | **Cursor** | Converts rules to `.mdc` format; Cursor's built-in search handles filtering | Depends on Cursor's search |
-| **Codex** | Static `AGENTS.md` (no dynamic loading) | All rules loaded |
+| **Codex** | Aggregated `AGENTS.md` (rules merged into single file) | All rules loaded |
 
 ---
 
@@ -136,9 +136,9 @@ alwaysApply: false
 
 After conversion, **Cursor's built-in semantic search** handles rule filtering — ai-nexus does not run a router for Cursor. The value is unified rule management: write rules once, use them across Claude Code, Cursor, and Codex.
 
-### Codex: Static Rules
+### Codex: Aggregated Rules
 
-A single `AGENTS.md` file is loaded at session start. No dynamic loading.
+Individual rule files are aggregated into a single `AGENTS.md` file, which is loaded at session start. No dynamic loading.
 
 ---
 

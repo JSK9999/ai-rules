@@ -3,7 +3,7 @@ import path from 'path';
 import os from 'os';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { detectInstall, scanDir, compareConfigs, ensureDir, computeFileHashes } from '../utils/files.js';
+import { detectInstall, scanDir, compareConfigs, ensureDir, computeFileHashes, aggregateToAgentsMd } from '../utils/files.js';
 import crypto from 'crypto';
 import { updateRepo } from '../utils/git.js';
 import type { DotrulesMeta } from '../types.js';
@@ -201,6 +201,32 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
       if (addedCount > 0) console.log(chalk.green(`   + ${addedCount} files added`));
       if (updatedCount > 0) console.log(chalk.yellow(`   ~ ${updatedCount} files updated`));
       if (removedCount > 0) console.log(chalk.red(`   - ${removedCount} files removed`));
+      hasChanges = true;
+    }
+  }
+
+  // Regenerate AGENTS.md for Codex
+  if (meta.tools && meta.tools.includes('codex')) {
+    const codexDir = path.join(targetDir, '.codex');
+    const destAgents = path.join(codexDir, 'AGENTS.md');
+    const content = aggregateToAgentsMd(configDir);
+
+    if (fs.existsSync(destAgents)) {
+      const existing = fs.readFileSync(destAgents, 'utf8');
+      if (existing !== content) {
+        if (options.force) {
+          ensureDir(codexDir);
+          fs.writeFileSync(destAgents, content);
+          console.log(chalk.green('   ✓ Codex AGENTS.md regenerated'));
+          hasChanges = true;
+        } else {
+          console.log(chalk.gray('   Codex AGENTS.md has changes (use --force to regenerate)'));
+        }
+      }
+    } else {
+      ensureDir(codexDir);
+      fs.writeFileSync(destAgents, content);
+      console.log(chalk.green('   ✓ Codex AGENTS.md generated'));
       hasChanges = true;
     }
   }
