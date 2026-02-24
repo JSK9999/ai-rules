@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(cd:*)",
+      "Bash(gh auth:*)",
+      "Bash(echo gh not found:*)",
+      "Bash(ssh-keygen:*)",
+      "Bash(true:*)",
+      "Bash(npm whoami:*)",
+      "Bash(echo:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(ls:*)"
+    ]
+  }
+}

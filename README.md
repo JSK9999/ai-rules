@@ -72,15 +72,15 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 **Setup Wizard**
 
-![init](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-init.gif)
+![init](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/setup-wizard.gif)
 
 **Installed Rules**
 
-![list](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-list.gif)
+![list](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/installed-rules.gif)
 
 **Rule Marketplace**
 
-![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/ai-nexus-browse.gif)
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/marketplace-demo.gif)
 
 ---
 
@@ -311,7 +311,7 @@ npx ai-nexus update
 
 ## Rule Marketplace
 
-![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/browse.png)
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/marketplace.png)
 
 Open the web-based marketplace to search, install, and remove rules with one click:
 
