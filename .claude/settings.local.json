@@ -10,7 +10,9 @@
       "Bash(npm whoami:*)",
       "Bash(echo:*)",
       "WebFetch(domain:www.npmjs.com)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:jsk9999.github.io)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

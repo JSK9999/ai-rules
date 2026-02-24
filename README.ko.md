@@ -72,15 +72,15 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 **설치 마법사**
 
-![init](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/setup-wizard.gif)
+![init](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/nexus-setup.gif)
 
 **설치된 룰 목록**
 
-![list](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/installed-rules.gif)
+![list](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/nexus-rules.gif)
 
 **룰 마켓플레이스**
 
-![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/marketplace-demo.gif)
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/nexus-browse.gif)
 
 ---
 
@@ -311,7 +311,7 @@ npx ai-nexus update
 
 ## 룰 마켓플레이스
 
-![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/marketplace.png)
+![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/nexus-marketplace.png)
 
 웹 기반 마켓플레이스에서 룰을 검색, 설치, 제거할 수 있습니다:
 
