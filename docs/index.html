@@ -699,7 +699,7 @@
       <div class="container">
         <div class="hero-badge">Open Source</div>
         <h1>Write once, use <span class="gradient">everywhere</span></h1>
-        <p>Unified rule manager for Claude Code, Cursor, and Codex. One source of truth, smart rule loading, fewer wasted tokens.</p>
+        <p>Unified rule manager for Claude Code, Cursor, and Codex. 30+ rules installed, only the relevant ones loaded per prompt. No more wasted tokens.</p>
         <div class="hero-cta">
           <a href="https://github.com/JSK9999/ai-nexus" class="btn btn-primary">Get Started</a>
           <a href="docs.html" class="btn btn-secondary">Documentation</a>
@@ -722,15 +722,15 @@
         <div class="stats-grid">
           <div class="stat fade-in">
             <div class="stat-value" data-count="30" data-suffix="+">0</div>
-            <div class="stat-label">Built-in Rules</div>
+            <div class="stat-label">Rules Installed</div>
           </div>
           <div class="stat fade-in fade-in-delay-1">
-            <div class="stat-value" data-count="3" data-suffix="">0</div>
-            <div class="stat-label">Supported Tools</div>
+            <div class="stat-value" data-count="2" data-suffix="-3">0</div>
+            <div class="stat-label">Loaded per Prompt</div>
           </div>
           <div class="stat fade-in fade-in-delay-2">
-            <div class="stat-value" data-count="2" data-suffix="-3">0</div>
-            <div class="stat-label">Loaded per prompt</div>
+            <div class="stat-value" data-count="3" data-suffix="">0</div>
+            <div class="stat-label">Tools Supported</div>
           </div>
         </div>
       </div>
@@ -738,8 +738,8 @@
 
     <section class="problem-solution">
       <div class="container">
-        <h2 class="section-title fade-in">The Problem & Solution</h2>
-        <p class="section-subtitle fade-in">One source of truth, fewer wasted tokens</p>
+        <h2 class="section-title fade-in">Why ai-nexus?</h2>
+        <p class="section-subtitle fade-in">30+ rules installed, only 2-3 loaded. One source of truth for every tool.</p>
         <div class="comparison">
           <div class="comparison-card before fade-in">
             <h3>Before</h3>
@@ -774,38 +774,38 @@ Deploy everywhere:
 
     <section class="features">
       <div class="container">
-        <h2 class="section-title fade-in">Features</h2>
-        <p class="section-subtitle fade-in">Everything you need for efficient rule management</p>
+        <h2 class="section-title fade-in">Key Benefits</h2>
+        <p class="section-subtitle fade-in">Concrete advantages that make a real difference</p>
         <div class="features-grid">
           <div class="feature-card fade-in">
             <div class="feature-icon">&gt;_</div>
-            <h3>Semantic Router</h3>
-            <p>AI analyzes your prompt and loads only relevant rules. GPT-4o-mini or Claude Haiku for just ~$0.50/month.</p>
+            <h3>Load Only What You Need</h3>
+            <p>Semantic Router picks only the relevant 2-3 rules per prompt instead of loading all 30+. Less noise means better AI responses and no wasted tokens. Powered by GPT-4o-mini or Claude Haiku for ~$0.50/month.</p>
           </div>
           <div class="feature-card fade-in fade-in-delay-1">
             <div class="feature-icon">&lt;/&gt;</div>
-            <h3>Team Sync</h3>
-            <p>Share rules via Git repositories. Everyone stays in sync with a single update command.</p>
+            <h3>Write Once, Deploy Everywhere</h3>
+            <p>Write a single <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px;font-size:0.8rem">.md</code> rule. It auto-converts to <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px;font-size:0.8rem">.mdc</code> for Cursor and <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px;font-size:0.8rem">AGENTS.md</code> for Codex. No more copy-pasting across tools.</p>
           </div>
           <div class="feature-card fade-in fade-in-delay-2">
             <div class="feature-icon">#</div>
-            <h3>Local Priority</h3>
-            <p>Your customizations are never overwritten. Only new files are added during updates.</p>
+            <h3>Team-Wide Consistency</h3>
+            <p>Share rules via Git. Every team member installs from the same source. One <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px;font-size:0.8rem">update</code> command keeps everyone in sync.</p>
           </div>
           <div class="feature-card fade-in fade-in-delay-3">
             <div class="feature-icon">$</div>
-            <h3>Zero Config</h3>
-            <p>Works out of the box. Interactive setup guides you through the installation.</p>
+            <h3>Your Edits Stay Safe</h3>
+            <p>Install and update never overwrite your local customizations. Only new files are added. Your rules, your control.</p>
           </div>
           <div class="feature-card fade-in fade-in-delay-4">
             <div class="feature-icon">~</div>
-            <h3>Symlink Mode</h3>
-            <p>Rules link to source. Updates sync instantly without overwriting anything.</p>
+            <h3>Zero Config Setup</h3>
+            <p>One command to install. Interactive wizard guides you through tool selection, rule categories, and templates. Works out of the box with keyword fallback.</p>
           </div>
           <div class="feature-card fade-in fade-in-delay-5">
             <div class="feature-icon">@</div>
-            <h3>Rule Marketplace</h3>
-            <p>Browse, search, install, and remove community rules from a web UI. One command: <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px;font-size:0.8rem">ai-nexus browse</code></p>
+            <h3>Community Marketplace</h3>
+            <p>Browse, search, install, and remove community rules from a local web UI. Contribute via PR — rules become available instantly after merge.</p>
           </div>
         </div>
       </div>
@@ -814,25 +814,25 @@ Deploy everywhere:
     <section class="tools">
       <div class="container">
         <h2 class="section-title fade-in">Supported Tools</h2>
-        <p class="section-subtitle fade-in">Works with the tools you already use</p>
+        <p class="section-subtitle fade-in">One rule file, three tools — automatically</p>
         <div class="tools-grid">
           <div class="tool-card fade-in">
             <h3>Claude Code</h3>
-            <div class="method">Semantic Router</div>
-            <div class="savings">Only relevant</div>
-            <div class="savings-label">rules loaded per prompt</div>
+            <div class="method">Semantic Router Hook</div>
+            <div class="savings">2-3</div>
+            <div class="savings-label">relevant rules loaded per prompt</div>
           </div>
           <div class="tool-card fade-in fade-in-delay-1">
             <h3>Cursor</h3>
-            <div class="method">Auto-converts to .mdc</div>
-            <div class="savings">Converted</div>
-            <div class="savings-label">Cursor's search handles filtering</div>
+            <div class="method">Auto-converts .md to .mdc</div>
+            <div class="savings">Auto</div>
+            <div class="savings-label">format conversion + Cursor search</div>
           </div>
           <div class="tool-card fade-in fade-in-delay-2">
             <h3>Codex</h3>
-            <div class="method">Static AGENTS.md</div>
-            <div class="savings">-</div>
-            <div class="savings-label">no dynamic loading</div>
+            <div class="method">Aggregated AGENTS.md</div>
+            <div class="savings">Unified</div>
+            <div class="savings-label">all rules in one file</div>
           </div>
         </div>
       </div>
@@ -875,10 +875,6 @@ Deploy everywhere:
             <code>ai-nexus test &lt;prompt&gt;</code>
             <span>Preview which rules would load</span>
           </div>
-          <div class="command-item fade-in fade-in-delay-4">
-            <code>ai-nexus doctor</code>
-            <span>Diagnose installation issues</span>
-          </div>
         </div>
       </div>
     </section>
@@ -907,8 +903,8 @@ Deploy everywhere:
 
     <section class="cta">
       <div class="container">
-        <h2 class="fade-in">Ready to unify your rules and save tokens?</h2>
-        <p class="fade-in">Get started in seconds with a single command.</p>
+        <h2 class="fade-in">Stop wasting tokens. Load only what matters.</h2>
+        <p class="fade-in">One command. 30+ built-in rules. Only the relevant ones loaded per prompt.</p>
         <div class="terminal fade-in" style="margin: 0 auto;">
           <div class="terminal-header">
             <div class="terminal-dot red"></div>
