@@ -76,7 +76,7 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 | 도구 | 동작 방식 | 토큰 부담 |
 |------|-----------|-----------|
 | **Claude Code** | 시맨틱 라우터가 프롬프트마다 동적으로 룰 교체 | 필요한 룰만 로딩 |
-| **Cursor** | `.mdc` description 필드를 통한 시맨틱 서치 | Description 기반 필터링 |
+| **Cursor** | 룰을 `.mdc` 형식으로 변환; Cursor 내장 검색이 필터링 | Cursor 검색에 의존 |
 | **Codex** | 정적 `AGENTS.md` (동적 로딩 없음) | 전체 룰 로딩 |
 
 ---
@@ -107,9 +107,9 @@ GPT-4o-mini 또는 Claude Haiku가 프롬프트를 분석해 적절한 룰을 �
 **AI 없이** (폴백):
 프롬프트의 키워드를 매칭해서 룰을 활성화합니다.
 
-### Cursor: 시맨틱 서치
+### Cursor: 룰 변환기
 
-룰이 description 메타데이터가 포함된 `.mdc` 형식으로 변환됩니다:
+ai-nexus가 `.md` 룰을 Cursor의 `.mdc` 형식으로 변환하면서 `description`과 `alwaysApply` 메타데이터를 자동 추가합니다:
 
 ```markdown
 ---
@@ -121,7 +121,7 @@ alwaysApply: false
 ...
 ```
 
-Cursor의 내장 시맨틱 서치가 관련도에 따라 룰을 로드합니다.
+변환 후 룰 필터링은 **Cursor 내장 시맨틱 서치**가 처리합니다 — ai-nexus가 Cursor에서 라우터를 실행하지는 않습니다. 핵심 가치는 통합 룰 관리: 룰을 한 번 작성하면 Claude Code, Cursor, Codex에서 모두 사용할 수 있습니다.
 
 ### Codex: 정적 룰
 

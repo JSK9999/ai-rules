@@ -76,7 +76,7 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 | Tool | How it works | Token overhead |
 |------|--------------|----------------|
 | **Claude Code** | Semantic Router dynamically swaps rules per prompt | Only relevant rules loaded |
-| **Cursor** | Semantic Search via `.mdc` description fields | Description-based filtering |
+| **Cursor** | Converts rules to `.mdc` format; Cursor's built-in search handles filtering | Depends on Cursor's search |
 | **Codex** | Static `AGENTS.md` (no dynamic loading) | All rules loaded |
 
 ---
@@ -107,9 +107,9 @@ GPT-4o-mini or Claude Haiku analyzes your prompt and picks the right rules. Cost
 **Without AI** (fallback):
 Keyword matching activates rules based on words in your prompt.
 
-### Cursor: Semantic Search
+### Cursor: Rule Converter
 
-Rules are converted to `.mdc` format with description metadata:
+ai-nexus converts `.md` rules to Cursor's `.mdc` format, adding `description` and `alwaysApply` metadata automatically:
 
 ```markdown
 ---
@@ -121,7 +121,7 @@ alwaysApply: false
 ...
 ```
 
-Cursor's built-in semantic search loads rules based on relevance.
+After conversion, **Cursor's built-in semantic search** handles rule filtering — ai-nexus does not run a router for Cursor. The value is unified rule management: write rules once, use them across Claude Code, Cursor, and Codex.
 
 ### Codex: Static Rules
 
