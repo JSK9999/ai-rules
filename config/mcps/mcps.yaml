@@ -1,0 +1,133 @@
+servers:
+  # Documentation & Research
+  - name: context7
+    description: "라이브러리 문서 검색 (Context7)"
+    command: "npx -y @upstash/context7-mcp"
+    category: docs
+
+  - name: cloudflare-docs
+    description: "Cloudflare 문서 검색"
+    type: http
+    url: "https://docs.mcp.cloudflare.com/mcp"
+    category: docs
+
+  # Reasoning & Thinking
+  - name: sequential-thinking
+    description: "순차적 사고 (Chain of Thought)"
+    command: "npx -y @modelcontextprotocol/server-sequential-thinking"
+    category: reasoning
+
+  - name: memory
+    description: "세션 간 메모리 유지"
+    command: "npx -y @modelcontextprotocol/server-memory"
+    category: reasoning
+
+  # Framework Support
+  - name: next-devtools
+    description: "Next.js 개발 지원"
+    command: "npx -y next-devtools-mcp@latest"
+    category: framework
+
+  - name: sveltejs
+    description: "SvelteKit 개발 지원"
+    command: "npx -y @sveltejs/mcp"
+    category: framework
+
+  # UI Components
+  - name: shadcn-ui
+    description: "shadcn/ui 컴포넌트"
+    command: "npx shadcn@latest mcp"
+    category: ui
+
+  - name: magic
+    description: "Magic UI 컴포넌트"
+    command: "npx -y @magicuidesign/mcp@latest"
+    category: ui
+
+  # Automation
+  - name: playwright
+    description: "브라우저 자동화 (Playwright)"
+    command: "npx -y @playwright/mcp@latest"
+    category: automation
+
+  - name: firecrawl
+    description: "웹 스크래핑 및 크롤링"
+    command: "npx -y firecrawl-mcp"
+    category: automation
+    env:
+      - FIRECRAWL_API_KEY
+
+  # Productivity
+  - name: atlassian
+    description: "Jira/Confluence 연동"
+    command: "uvx mcp-atlassian"
+    category: productivity
+    env:
+      - CONFLUENCE_URL
+      - CONFLUENCE_USERNAME
+      - CONFLUENCE_API_TOKEN
+      - JIRA_URL
+      - JIRA_USERNAME
+      - JIRA_API_TOKEN
+
+
+  - name: atlassian-remote
+    description: "official atlassian-remote"
+    command: "atlassian-remote --transport sse https://mcp.atlassian.com/v1/mcp"
+    category: productivity
+    env:
+
+  - name: github
+    description: "GitHub 저장소/이슈/PR 관리"
+    command: "npx -y @modelcontextprotocol/server-github"
+    category: productivity
+    env:
+      - GITHUB_PERSONAL_ACCESS_TOKEN
+
+  - name: sentry
+    description: "Sentry 에러 모니터링 및 이슈 분석 (OAuth 로그인)"
+    type: http
+    url: "https://mcp.sentry.dev/mcp"
+    category: productivity
+
+  # Database & Backend
+  - name: supabase
+    description: "Supabase 데이터베이스 작업"
+    command: "npx -y @supabase/mcp-server-supabase@latest --project-ref=YOUR_PROJECT_REF"
+    category: database
+
+  - name: clickhouse
+    description: "ClickHouse 분석 쿼리"
+    type: http
+    url: "https://mcp.clickhouse.cloud/mcp"
+    category: database
+
+  # Deployment & Infrastructure
+  - name: vercel
+    description: "Vercel 배포 및 프로젝트 관리"
+    type: http
+    url: "https://mcp.vercel.com"
+    category: deployment
+
+  - name: railway
+    description: "Railway 배포"
+    command: "npx -y @railway/mcp-server"
+    category: deployment
+
+  - name: cloudflare-workers-builds
+    description: "Cloudflare Workers 빌드"
+    type: http
+    url: "https://builds.mcp.cloudflare.com/mcp"
+    category: deployment
+
+  - name: cloudflare-workers-bindings
+    description: "Cloudflare Workers 바인딩"
+    type: http
+    url: "https://bindings.mcp.cloudflare.com/mcp"
+    category: deployment
+
+  - name: cloudflare-observability
+    description: "Cloudflare 로그/모니터링"
+    type: http
+    url: "https://observability.mcp.cloudflare.com/mcp"
+    category: deployment

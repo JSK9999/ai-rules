@@ -1,0 +1,5 @@
+name: preserve-context
+event: PreCompact
+type: command
+timeout: 5000
+description: Preserve session state before context compaction to prevent information loss

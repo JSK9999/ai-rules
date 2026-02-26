@@ -1,0 +1,37 @@
+# Claude Code Plugins 설정
+# Marketplace와 플러그인 목록
+# 형식:
+# marketplace-name:
+#   source: <git-url>
+#   plugins:
+#     - name: plugin-name
+#       description: 플러그인 설명
+
+marketplaces:
+  claude-plugins-official:
+    source: https://github.com/anthropics/claude-plugins-official.git
+    plugins:
+      - name: rust-analyzer-lsp
+        description: Rust 언어 서버 (코드 분석, 자동완성)
+      - name: typescript-lsp
+        description: TypeScript/JavaScript 언어 서버
+      - name: pyright-lsp
+        description: Python 언어 서버 (타입 체크)
+      - name: jdtls-lsp
+        description: Java 언어 서버 (Eclipse JDT)
+      - name: csharp-lsp
+        description: C# 언어 서버
+
+  anthropic-agent-skills:
+    source: https://github.com/anthropics/skills.git
+    plugins:
+      - name: document-skills
+        description: xlsx, docx, pptx, pdf 문서 생성/편집
+      - name: example-skills
+        description: 알고리즘 아트, 프론트엔드 디자인 등 예제 모음
+
+  obsidian-skills:
+    source: https://github.com/kepano/obsidian-skills
+    plugins:
+      - name: obsidian
+        description: Obsidian 노트 관리 (CEO Stephan Ango aka kepano 제작)

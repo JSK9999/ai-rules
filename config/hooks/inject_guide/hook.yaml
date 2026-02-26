@@ -1,0 +1,5 @@
+name: inject_guide
+event: UserPromptSubmit
+type: command
+timeout: 10000
+description: Automatically inject relevant agent guides based on user prompt keywords

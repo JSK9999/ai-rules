@@ -1,0 +1,5 @@
+name: persist-session
+event: SessionEnd
+type: command
+timeout: 5000
+description: Persist learned content and session context for future sessions
