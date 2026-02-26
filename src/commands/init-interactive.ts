@@ -9,7 +9,6 @@ import {
   getTargetDir,
   getConfigPath,
   ensureDir,
-  createSymlink,
   scanDir,
   computeFileHashes,
   aggregateToAgentsMd,
@@ -45,7 +44,6 @@ interface Selections {
   categories: string[];
   selectedFiles: Record<string, string[]>;
   template: string | null;
-  method: 'symlink' | 'copy';
 }
 
 const TEMPLATES = [
@@ -174,31 +172,11 @@ export async function initInteractive(): Promise<void> {
     },
   ]);
 
-  // Step 6: Select install method
-  const { method } = await inquirer.prompt<{ method: 'symlink' | 'copy' }>([
-    {
-      type: 'list',
-      name: 'method',
-      message: 'Select install method',
-      choices: [
-        {
-          name: '🔗 symlink (auto-update via ai-nexus update)',
-          value: 'symlink',
-        },
-        {
-          name: '📄 copy (independent copy)',
-          value: 'copy',
-        },
-      ],
-    },
-  ]);
-
-  // Step 7: Confirmation
+  // Step 6: Confirmation
   console.log(chalk.cyan('\n📋 Installation Summary\n'));
   console.log(chalk.gray('─'.repeat(40)));
   console.log(`   Scope: ${scope === 'global' ? 'Global (~/)' : 'Project (./)'}` );
   console.log(`   Tools: ${tools.join(', ')}`);
-  console.log(`   Method: ${method === 'symlink' ? 'symlink' : 'copy'}`);
   console.log(`   Template: ${template || 'None'}`);
   console.log(`   Categories:`);
 
@@ -235,7 +213,6 @@ export async function initInteractive(): Promise<void> {
       categories,
       selectedFiles,
       template,
-      method,
     });
     spinner.succeed('Installation complete!');
   } catch (error) {
@@ -259,7 +236,6 @@ export async function initInteractive(): Promise<void> {
   if (tools.includes('cursor')) {
     console.log(`   Cursor: ${path.join(targetDir, '.cursor/rules')}`);
   }
-  console.log(`   Mode: ${method}`);
   if (template) {
     console.log(`   Template: ${template}`);
   }
@@ -267,10 +243,6 @@ export async function initInteractive(): Promise<void> {
 
   // Next steps
   console.log(chalk.cyan('\n📋 Next Steps:\n'));
-
-  if (method === 'symlink') {
-    console.log(chalk.white('  1. Run "ai-nexus update" to sync latest rules'));
-  }
 
   const hasApiKey = !!(process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY);
   if (!hasApiKey && tools.includes('claude') && categories.includes('hooks')) {
@@ -287,7 +259,7 @@ export async function initInteractive(): Promise<void> {
 }
 
 async function install(selections: Selections): Promise<void> {
-  const { scope, tools, categories, selectedFiles, template, method } = selections;
+  const { scope, tools, categories, selectedFiles, template } = selections;
   const targetDir = getTargetDir(scope);
   const aiRulesDir = getConfigPath(scope);
   const configDir = path.join(aiRulesDir, 'config');
@@ -363,41 +335,35 @@ async function install(selections: Selections): Promise<void> {
 
       if (!fs.existsSync(sourceDir)) continue;
 
-      // Local priority: skip if directory exists and is not a symlink
+      // Local priority: skip if directory already exists
       if (fs.existsSync(targetPath)) {
         try {
           const stat = fs.lstatSync(targetPath);
-          if (!stat.isSymbolicLink()) {
+          if (stat.isSymbolicLink()) {
+            // Remove existing symlink to replace with copy
+            fs.unlinkSync(targetPath);
+          } else {
             // Existing directory - only add new files
-            if (method === 'copy') {
-              const files = scanDir(sourceDir);
-              for (const [rel, content] of Object.entries(files)) {
-                const dest = path.join(targetPath, rel);
-                if (!fs.existsSync(dest)) {
-                  ensureDir(path.dirname(dest));
-                  fs.writeFileSync(dest, content);
-                }
+            const files = scanDir(sourceDir);
+            for (const [rel, content] of Object.entries(files)) {
+              const dest = path.join(targetPath, rel);
+              if (!fs.existsSync(dest)) {
+                ensureDir(path.dirname(dest));
+                fs.writeFileSync(dest, content);
               }
             }
             continue;
           }
-          // Symlink - remove and recreate
-          fs.unlinkSync(targetPath);
         } catch {
           // Ignore errors
         }
       }
 
-      if (method === 'symlink') {
-        createSymlink(sourceDir, targetPath);
-      } else {
-        // Copy mode
-        const files = scanDir(sourceDir);
-        for (const [rel, content] of Object.entries(files)) {
-          const dest = path.join(targetPath, rel);
-          ensureDir(path.dirname(dest));
-          fs.writeFileSync(dest, content);
-        }
+      const files = scanDir(sourceDir);
+      for (const [rel, content] of Object.entries(files)) {
+        const dest = path.join(targetPath, rel);
+        ensureDir(path.dirname(dest));
+        fs.writeFileSync(dest, content);
       }
     }
 
@@ -460,16 +426,15 @@ async function install(selections: Selections): Promise<void> {
     }
   }
 
-  // Save metadata (compute file hashes for copy mode conflict detection)
+  // Save metadata
   const claudeDir = path.join(targetDir, '.claude');
   const meta: DotrulesMeta = {
     version: require(path.join(PACKAGE_ROOT, 'package.json')).version,
-    mode: method,
     tools,
     template,
     sources: [{ name: 'builtin', type: 'builtin' }],
     selectedFiles,
-    ...(method === 'copy' ? { fileHashes: computeFileHashes(claudeDir) } : {}),
+    fileHashes: computeFileHashes(claudeDir),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

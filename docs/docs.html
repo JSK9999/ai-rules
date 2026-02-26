@@ -135,7 +135,7 @@
       <div class="group">Configuration</div>
       <a href="#how-it-works">How It Works</a>
       <a href="#directory-structure">Directory Structure</a>
-      <a href="#install-modes">Install Modes</a>
+      <a href="#update-local-priority">Update & Local Priority</a>
       <a href="#rule-format">Rule Format</a>
       <div class="group">Advanced</div>
       <a href="#team-rules">Team Rules</a>
@@ -281,11 +281,11 @@ Selected rules (3):
 <span class="dir">.claude/</span>                       <span class="cm"># Claude Code</span>
 ├── <span class="dir">hooks/</span><span class="file">semantic-router.cjs</span>
 ├── <span class="file">settings.json</span>
-├── <span class="dir">rules/</span>          <span class="link">→ .ai-nexus/config/rules</span>
-├── <span class="dir">commands/</span>       <span class="link">→ .ai-nexus/config/commands</span>
-├── <span class="dir">skills/</span>         <span class="link">→ .ai-nexus/config/skills</span>
-├── <span class="dir">agents/</span>         <span class="link">→ .ai-nexus/config/agents</span>
-└── <span class="dir">contexts/</span>       <span class="link">→ .ai-nexus/config/contexts</span>
+├── <span class="dir">rules/</span>                        <span class="cm"># Copied from .ai-nexus/config/</span>
+├── <span class="dir">commands/</span>
+├── <span class="dir">skills/</span>
+├── <span class="dir">agents/</span>
+└── <span class="dir">contexts/</span>
 
 <span class="dir">.cursor/rules/</span>                 <span class="cm"># Cursor (.mdc files)</span>
 ├── <span class="file">essential.mdc</span>
@@ -294,26 +294,25 @@ Selected rules (3):
 <span class="dir">.codex/</span><span class="file">AGENTS.md</span>               <span class="cm"># Codex</span>
       </div>
 
-      <!-- Install Modes -->
-      <h2 id="install-modes">Install Modes</h2>
+      <!-- Update & Local Priority -->
+      <h2 id="update-local-priority">Update & Local Priority</h2>
 
-      <h3>Symlink (default)</h3>
-      <pre><code><span class="cm">$</span> <span class="hl">npx ai-nexus install</span></code></pre>
+      <p>Rules are installed as independent copies. Your customizations are always safe:</p>
       <ul>
-        <li>Rules link to source &mdash; <code>update</code> syncs instantly</li>
-        <li>Cannot edit rules directly (edit source instead)</li>
+        <li><strong>Existing files are never overwritten</strong> during install or update</li>
+        <li>Only new files from source are added</li>
+        <li><code>npx ai-nexus update</code> syncs new rules from the latest package</li>
+        <li>Use <code>--force</code> to override (backup first!)</li>
       </ul>
 
-      <h3>Copy</h3>
-      <pre><code><span class="cm">$</span> <span class="hl">npx ai-nexus install --copy</span></code></pre>
-      <ul>
-        <li>Rules are independent copies</li>
-        <li>Can edit locally</li>
-        <li><code>update</code> only adds new files, never overwrites</li>
-      </ul>
+      <pre><code><span class="cm"># Sync new rules without overwriting local edits</span>
+<span class="cm">$</span> <span class="hl">npx ai-nexus update</span>
+
+<span class="cm"># Force overwrite everything</span>
+<span class="cm">$</span> <span class="hl">npx ai-nexus update --force</span></code></pre>
 
       <div class="callout">
-        <strong>Local priority:</strong> Existing files are never overwritten during install or update. Use <code>--force</code> to override.
+        <strong>Migrating from symlink mode?</strong> Just run <code>npx ai-nexus update</code> &mdash; symlinks are automatically converted to copies.
       </div>
 
       <!-- Rule Format -->

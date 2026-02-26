@@ -16,7 +16,6 @@ program
   .command('init')
   .description('Initialize rules in current project (.claude/, .codex/)')
   .option('--rules <url>', 'Git repository URL for rules (e.g., github.com/org/my-rules)')
-  .option('--copy', 'Copy files instead of symlink')
   .option('-q, --quick', 'Quick mode (skip interactive wizard)')
   .option('-y, --yes', 'Skip prompts and use defaults')
   .action(async (options) => {
@@ -33,7 +32,6 @@ program
   .command('install')
   .description('Install rules globally (~/.claude/, ~/.codex/)')
   .option('--rules <url>', 'Git repository URL for rules')
-  .option('--copy', 'Copy files instead of symlink')
   .option('-q, --quick', 'Quick mode (skip interactive wizard)')
   .action(async (options) => {
     if (options.quick || options.rules) {

@@ -199,35 +199,13 @@ Your rule content...
 
 ---
 
-## Installation Modes
+## Update & Local Priority
 
-### Symlink (default)
-
-```bash
-npx ai-nexus install
-```
-
-- Rules link to source → `update` syncs instantly
-- Cannot edit rules directly (edit source instead)
-
-### Copy
-
-```bash
-npx ai-nexus install --copy
-```
-
-- Rules are independent copies
-- Can edit locally
-- `update` only adds new files, never overwrites
-
----
-
-## Local Priority
-
-Your customizations are always safe:
+Rules are installed as independent copies. Your customizations are always safe:
 
 - **Existing files are never overwritten** during install or update
 - Only new files from source are added
+- `npx ai-nexus update` syncs new rules from the latest package
 - Use `--force` to override (backup first!)
 
 ```bash
@@ -237,6 +215,8 @@ npx ai-nexus update
 # This WILL overwrite everything
 npx ai-nexus update --force
 ```
+
+> **Migrating from symlink mode?** Just run `npx ai-nexus update` — symlinks are automatically converted to copies.
 
 ---
 
@@ -251,8 +231,8 @@ npx ai-nexus update --force
 .claude/                      # Claude Code
 ├── hooks/semantic-router.cjs
 ├── settings.json
-├── rules/          → .ai-nexus/config/rules
-└── commands/       → .ai-nexus/config/commands
+├── rules/                    # Copied from .ai-nexus/config/rules
+└── commands/                 # Copied from .ai-nexus/config/commands
 
 .cursor/rules/                # Cursor (.mdc files)
 ├── essential.mdc
@@ -272,7 +252,6 @@ npx ai-nexus install
 # Select: Claude Code, Cursor
 # Select: rules, commands, hooks, settings
 # Template: React/Next.js
-# Mode: symlink
 ```
 
 ### Team Setup

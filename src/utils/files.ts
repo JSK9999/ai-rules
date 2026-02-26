@@ -96,14 +96,6 @@ export function copyFile(src: string, dest: string): void {
   fs.copyFileSync(src, dest);
 }
 
-export function createSymlink(target: string, linkPath: string): void {
-  ensureDir(path.dirname(linkPath));
-  if (fs.existsSync(linkPath)) {
-    fs.rmSync(linkPath, { recursive: true });
-  }
-  fs.symlinkSync(target, linkPath);
-}
-
 const AGENTS_CATEGORIES = ['rules', 'commands', 'skills', 'agents', 'contexts'];
 const CATEGORY_LABELS: Record<string, string> = {
   rules: 'Rules',

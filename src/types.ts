@@ -6,7 +6,7 @@ export interface MetaSource {
 
 export interface DotrulesMeta {
   version: string;
-  mode: 'symlink' | 'copy';
+  mode?: 'symlink' | 'copy'; // deprecated: kept for migration, always 'copy' going forward
   sources: MetaSource[];
   tools?: string[];
   template?: string | null;

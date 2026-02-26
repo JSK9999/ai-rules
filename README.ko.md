@@ -199,35 +199,13 @@ description: 이 룰을 로드할 시점 (시맨틱 라우터가 사용)
 
 ---
 
-## 설치 모드
+## 업데이트 & 로컬 우선
 
-### Symlink (기본값)
-
-```bash
-npx ai-nexus install
-```
-
-- 룰이 소스에 링크 → `update`로 즉시 동기화
-- 룰을 직접 수정 불가 (소스에서 수정)
-
-### Copy
-
-```bash
-npx ai-nexus install --copy
-```
-
-- 룰이 독립적인 복사본
-- 로컬에서 자유롭게 수정 가능
-- `update`는 새 파일만 추가, 기존 파일 덮어쓰지 않음
-
----
-
-## 로컬 우선
-
-사용자의 커스터마이징은 항상 안전합니다:
+룰은 독립적인 복사본으로 설치됩니다. 사용자의 커스터마이징은 항상 안전합니다:
 
 - **기존 파일은 절대 덮어쓰지 않음** (install, update 모두)
 - 소스에서 새 파일만 추가
+- `npx ai-nexus update`로 최신 패키지의 새 룰을 동기화
 - `--force`로 강제 덮어쓰기 (백업 먼저!)
 
 ```bash
@@ -237,6 +215,8 @@ npx ai-nexus update
 # 모든 파일 강제 덮어쓰기
 npx ai-nexus update --force
 ```
+
+> **symlink 모드에서 마이그레이션?** `npx ai-nexus update`만 실행하면 symlink이 자동으로 복사본으로 변환됩니다.
 
 ---
 
@@ -251,8 +231,8 @@ npx ai-nexus update --force
 .claude/                      # Claude Code
 ├── hooks/semantic-router.cjs
 ├── settings.json
-├── rules/          → .ai-nexus/config/rules
-└── commands/       → .ai-nexus/config/commands
+├── rules/                    # .ai-nexus/config/rules에서 복사
+└── commands/                 # .ai-nexus/config/commands에서 복사
 
 .cursor/rules/                # Cursor (.mdc 파일)
 ├── essential.mdc
@@ -272,7 +252,6 @@ npx ai-nexus install
 # 선택: Claude Code, Cursor
 # 선택: rules, commands, hooks, settings
 # 템플릿: React/Next.js
-# 모드: symlink
 ```
 
 ### 팀 설정

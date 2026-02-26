@@ -7,7 +7,6 @@ import {
   getTargetDir,
   getConfigPath,
   ensureDir,
-  createSymlink,
   scanDir,
   computeFileHashes,
 } from '../utils/files.js';
@@ -21,7 +20,6 @@ const require = createRequire(import.meta.url);
 interface InitOptions {
   scope: 'project' | 'global';
   rules?: string;
-  copy?: boolean;
 }
 
 interface InstallResult {
@@ -31,11 +29,10 @@ interface InstallResult {
 }
 
 export async function init(options: InitOptions): Promise<void> {
-  const { scope, rules: rulesUrl, copy: copyMode } = options;
+  const { scope, rules: rulesUrl } = options;
   const targetDir = getTargetDir(scope);
   const aiRulesDir = getConfigPath(scope);
   const configDir = path.join(aiRulesDir, 'config');
-  const mode = copyMode ? 'copy' : 'symlink';
 
   console.log(chalk.bold(`\n  ai-nexus ${scope === 'global' ? 'global' : 'project'} setup\n`));
 
@@ -96,34 +93,29 @@ export async function init(options: InitOptions): Promise<void> {
 
     const fileCount = countFiles(sourceDir);
 
-    // Local priority: skip if directory exists and is not a symlink
+    // Local priority: skip if directory already exists
     if (fs.existsSync(targetPath)) {
       try {
         const stat = fs.lstatSync(targetPath);
-        if (!stat.isSymbolicLink()) {
+        if (stat.isSymbolicLink()) {
+          // Remove existing symlink to replace with copy
+          fs.unlinkSync(targetPath);
+        } else {
           results.push({ name: category, action: 'skipped', fileCount });
           continue;
         }
-        // Remove existing symlink to recreate
-        fs.unlinkSync(targetPath);
       } catch {
         // Ignore errors
       }
     }
 
-    if (mode === 'symlink') {
-      createSymlink(sourceDir, targetPath);
-      results.push({ name: category, action: 'symlink', fileCount });
-    } else {
-      // Copy mode
-      const files = scanDir(sourceDir);
-      for (const [rel, content] of Object.entries(files)) {
-        const dest = path.join(targetPath, rel);
-        ensureDir(path.dirname(dest));
-        fs.writeFileSync(dest, content);
-      }
-      results.push({ name: category, action: 'copied', fileCount });
+    const files = scanDir(sourceDir);
+    for (const [rel, content] of Object.entries(files)) {
+      const dest = path.join(targetPath, rel);
+      ensureDir(path.dirname(dest));
+      fs.writeFileSync(dest, content);
     }
+    results.push({ name: category, action: 'copied', fileCount });
   }
 
   // Install hooks
@@ -163,9 +155,8 @@ export async function init(options: InitOptions): Promise<void> {
   // Save metadata
   const meta: DotrulesMeta = {
     version: require(path.join(PACKAGE_ROOT, 'package.json')).version,
-    mode,
     sources,
-    ...(mode === 'copy' ? { fileHashes: computeFileHashes(claudeDir) } : {}),
+    fileHashes: computeFileHashes(claudeDir),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -175,20 +166,18 @@ export async function init(options: InitOptions): Promise<void> {
   );
 
   // Print structured summary
-  printSummary(claudeDir, mode, results);
+  printSummary(claudeDir, results);
 }
 
 function printSummary(
   claudeDir: string,
-  mode: string,
   results: InstallResult[],
 ): void {
   const installed = results.filter(r => r.action !== 'skipped');
   const skipped = results.filter(r => r.action === 'skipped');
 
   console.log(chalk.green.bold('\n  Setup complete!\n'));
-  console.log(`  Location: ${claudeDir}`);
-  console.log(`  Mode:     ${mode}\n`);
+  console.log(`  Location: ${claudeDir}\n`);
 
   // Installed items
   if (installed.length > 0) {

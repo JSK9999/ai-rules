@@ -4,7 +4,6 @@ import { detectInstall } from '../utils/files.js';
 
 interface DotrulesMeta {
   version: string;
-  mode: 'symlink' | 'copy';
   sources: Array<{
     name: string;
     url?: string;

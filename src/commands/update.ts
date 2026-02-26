@@ -40,11 +40,48 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   }
 
   const meta: DotrulesMeta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-  console.log(`   Mode: ${meta.mode}`);
   console.log(`   Sources: ${meta.sources.map(s => s.name).join(', ')}\n`);
 
-  // Update external sources
+  const configDir = path.join(configPath, 'config');
+  const targetDir = scope === 'global' ? os.homedir() : process.cwd();
+  const claudeDir = path.join(targetDir, '.claude');
+
+  // Migrate from symlink if needed
+  if (meta.mode === 'symlink') {
+    migrateFromSymlink(claudeDir, meta, metaPath);
+  }
+
   let hasChanges = false;
+
+  // Step 1: Sync new builtin files to .ai-nexus/config/
+  const builtinConfigDir = path.join(PACKAGE_ROOT, 'config');
+  const categories = ['rules', 'commands', 'skills', 'agents', 'contexts', 'hooks'];
+  let builtinAdded = 0;
+
+  for (const category of categories) {
+    const srcDir = path.join(builtinConfigDir, category);
+    if (!fs.existsSync(srcDir)) continue;
+
+    const destDir = path.join(configDir, category);
+    ensureDir(destDir);
+
+    const srcFiles = scanDir(srcDir);
+    for (const [rel, content] of Object.entries(srcFiles)) {
+      const dest = path.join(destDir, rel);
+      if (!fs.existsSync(dest)) {
+        ensureDir(path.dirname(dest));
+        fs.writeFileSync(dest, content);
+        builtinAdded++;
+      }
+    }
+  }
+
+  if (builtinAdded > 0) {
+    console.log(chalk.green(`   + ${builtinAdded} new builtin files synced`));
+    hasChanges = true;
+  }
+
+  // Step 2: Update external sources and re-merge new files
   const sourcesDir = path.join(configPath, 'sources');
 
   for (const source of meta.sources) {
@@ -60,172 +97,184 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
         } else {
           console.log(`      - Already up to date`);
         }
-      }
-    }
-  }
 
-  // Sync config to .claude/
-  const configDir = path.join(configPath, 'config');
-  const targetDir = scope === 'global'
-    ? os.homedir()
-    : process.cwd();
-  const claudeDir = path.join(targetDir, '.claude');
+        // Re-merge new files from external source to config
+        const externalConfigDir = fs.existsSync(path.join(repoPath, 'config'))
+          ? path.join(repoPath, 'config')
+          : repoPath;
 
-  if (meta.mode === 'symlink') {
-    // Sync new builtin files to ~/.ai-nexus/config/
-    const builtinConfigDir = path.join(PACKAGE_ROOT, 'config');
-    const categories = ['rules', 'commands', 'skills', 'agents', 'contexts', 'hooks'];
-    let addedCount = 0;
+        let extAdded = 0;
+        for (const category of categories) {
+          const srcCat = path.join(externalConfigDir, category);
+          if (!fs.existsSync(srcCat)) continue;
 
-    for (const category of categories) {
-      const srcDir = path.join(builtinConfigDir, category);
-      if (!fs.existsSync(srcDir)) continue;
+          const destCat = path.join(configDir, category);
+          ensureDir(destCat);
 
-      const destDir = path.join(configDir, category);
-      ensureDir(destDir);
+          const srcFiles = scanDir(srcCat);
+          for (const [rel, content] of Object.entries(srcFiles)) {
+            const prefixed = `${source.name}-${path.basename(rel)}`;
+            const destRel = path.join(path.dirname(rel), prefixed);
+            const dest = path.join(destCat, destRel === prefixed ? prefixed : destRel);
+            if (!fs.existsSync(dest)) {
+              ensureDir(path.dirname(dest));
+              fs.writeFileSync(dest, content);
+              extAdded++;
+            }
+          }
+        }
 
-      const srcFiles = scanDir(srcDir);
-      for (const [rel, content] of Object.entries(srcFiles)) {
-        const dest = path.join(destDir, rel);
-        if (!fs.existsSync(dest)) {
-          ensureDir(path.dirname(dest));
-          fs.writeFileSync(dest, content);
-          addedCount++;
+        if (extAdded > 0) {
+          console.log(chalk.green(`      + ${extAdded} new files from ${source.name}`));
+          hasChanges = true;
         }
       }
     }
-
-    if (addedCount > 0) {
-      console.log(chalk.green(`   + ${addedCount} new files added`));
-      hasChanges = true;
-    }
   }
 
-  if (meta.mode === 'copy') {
-    // Copy mode: compare and update files
-    const sourceFiles = scanDir(configDir);
-    const installedFiles = scanDir(claudeDir);
-    const diff = compareConfigs(sourceFiles, installedFiles);
+  // Step 3: Compare .ai-nexus/config vs .claude/ and sync
+  const sourceFiles = scanDir(configDir);
+  const installedFiles = scanDir(claudeDir);
+  const diff = compareConfigs(sourceFiles, installedFiles);
 
-    if (diff.added.length === 0 && diff.modified.length === 0 && diff.removed.length === 0) {
+  if (diff.added.length === 0 && diff.modified.length === 0 && diff.removed.length === 0) {
+    if (!hasChanges) {
       console.log('\n✅ Already up to date!\n');
       return;
     }
-
+  } else {
     console.log('\n   Changes detected:');
     if (diff.added.length > 0) console.log(chalk.green(`   + ${diff.added.length} new files`));
     if (diff.modified.length > 0) console.log(chalk.yellow(`   ~ ${diff.modified.length} modified files`));
     if (diff.removed.length > 0) console.log(chalk.red(`   - ${diff.removed.length} removed in source`));
+  }
 
-    // Determine which files to update
-    const filesToAdd = diff.added;
-    let filesToUpdate: string[];
-    let filesToRemove: string[] = [];
+  // Determine which files to update
+  const filesToAdd = diff.added;
+  let filesToUpdate: string[];
+  let filesToRemove: string[] = [];
 
-    if (options.force) {
-      // Force mode: update everything, but warn about user-edited files
-      const userEdited = detectUserEdits(diff.modified, claudeDir, meta.fileHashes);
-      if (userEdited.length > 0) {
-        console.log(chalk.red(`\n   WARNING: ${userEdited.length} file(s) have local edits that will be overwritten:`));
-        for (const f of userEdited) {
-          console.log(chalk.red(`     - ${f}`));
-        }
+  if (options.force) {
+    const userEdited = detectUserEdits(diff.modified, claudeDir, meta.fileHashes);
+    if (userEdited.length > 0) {
+      console.log(chalk.red(`\n   WARNING: ${userEdited.length} file(s) have local edits that will be overwritten:`));
+      for (const f of userEdited) {
+        console.log(chalk.red(`     - ${f}`));
+      }
 
-        const { proceed } = await inquirer.prompt<{ proceed: boolean }>([
-          {
-            type: 'confirm',
-            name: 'proceed',
-            message: 'Overwrite these user-edited files?',
-            default: false,
-          },
-        ]);
-        if (!proceed) {
-          filesToUpdate = diff.modified.filter(f => !userEdited.includes(f));
-        } else {
-          filesToUpdate = diff.modified;
-        }
+      const { proceed } = await inquirer.prompt<{ proceed: boolean }>([
+        {
+          type: 'confirm',
+          name: 'proceed',
+          message: 'Overwrite these user-edited files?',
+          default: false,
+        },
+      ]);
+      if (!proceed) {
+        filesToUpdate = diff.modified.filter(f => !userEdited.includes(f));
       } else {
         filesToUpdate = diff.modified;
       }
-      filesToRemove = diff.removed;
-    } else if (options.addOnly) {
-      // Add-only mode: only add new files
-      filesToUpdate = [];
-      filesToRemove = [];
-    } else if (options.interactive && diff.modified.length > 0) {
-      // Interactive mode: ask for each modified file
-      console.log(chalk.cyan('\n   Modified files (choose which to overwrite):\n'));
+    } else {
+      filesToUpdate = diff.modified;
+    }
+    filesToRemove = diff.removed;
+  } else if (options.addOnly) {
+    filesToUpdate = [];
+    filesToRemove = [];
+  } else if (options.interactive && diff.modified.length > 0) {
+    console.log(chalk.cyan('\n   Modified files (choose which to overwrite):\n'));
 
-      const { selectedFiles } = await inquirer.prompt<{ selectedFiles: string[] }>([
+    const { selectedFiles } = await inquirer.prompt<{ selectedFiles: string[] }>([
+      {
+        type: 'checkbox',
+        name: 'selectedFiles',
+        message: 'Select files to overwrite',
+        choices: diff.modified.map(f => ({
+          name: f,
+          value: f,
+          checked: false,
+        })),
+      },
+    ]);
+    filesToUpdate = selectedFiles;
+
+    if (diff.removed.length > 0) {
+      const { removeFiles } = await inquirer.prompt<{ removeFiles: boolean }>([
         {
-          type: 'checkbox',
-          name: 'selectedFiles',
-          message: 'Select files to overwrite',
-          choices: diff.modified.map(f => ({
-            name: f,
-            value: f,
-            checked: false,
-          })),
+          type: 'confirm',
+          name: 'removeFiles',
+          message: `Remove ${diff.removed.length} files that no longer exist in source?`,
+          default: false,
         },
       ]);
-      filesToUpdate = selectedFiles;
+      filesToRemove = removeFiles ? diff.removed : [];
+    }
+  } else {
+    filesToUpdate = [];
+    filesToRemove = [];
 
-      if (diff.removed.length > 0) {
-        const { removeFiles } = await inquirer.prompt<{ removeFiles: boolean }>([
-          {
-            type: 'confirm',
-            name: 'removeFiles',
-            message: `Remove ${diff.removed.length} files that no longer exist in source?`,
-            default: false,
-          },
-        ]);
-        filesToRemove = removeFiles ? diff.removed : [];
+    if (diff.modified.length > 0) {
+      console.log(chalk.gray(`\n   Skipping ${diff.modified.length} modified files (use --force to overwrite)`));
+    }
+  }
+
+  // Apply changes
+  let addedCount = 0;
+  let updatedCount = 0;
+  let removedCount = 0;
+
+  for (const rel of filesToAdd) {
+    const src = path.join(configDir, rel);
+    const dest = path.join(claudeDir, rel);
+    ensureDir(path.dirname(dest));
+    fs.copyFileSync(src, dest);
+    addedCount++;
+  }
+
+  for (const rel of filesToUpdate) {
+    const src = path.join(configDir, rel);
+    const dest = path.join(claudeDir, rel);
+    ensureDir(path.dirname(dest));
+    fs.copyFileSync(src, dest);
+    updatedCount++;
+  }
+
+  for (const rel of filesToRemove) {
+    const dest = path.join(claudeDir, rel);
+    if (fs.existsSync(dest)) {
+      fs.unlinkSync(dest);
+      removedCount++;
+    }
+  }
+
+  if (addedCount > 0 || updatedCount > 0 || removedCount > 0) {
+    console.log('\n   Applied:');
+    if (addedCount > 0) console.log(chalk.green(`   + ${addedCount} files added`));
+    if (updatedCount > 0) console.log(chalk.yellow(`   ~ ${updatedCount} files updated`));
+    if (removedCount > 0) console.log(chalk.red(`   - ${removedCount} files removed`));
+    hasChanges = true;
+  }
+
+  // Step 4: Sync hooks to .claude/hooks/ (new files only)
+  const hooksConfigDir = path.join(configDir, 'hooks');
+  const hooksTargetDir = path.join(claudeDir, 'hooks');
+  if (fs.existsSync(hooksConfigDir)) {
+    ensureDir(hooksTargetDir);
+    let hooksAdded = 0;
+
+    const hookFiles = scanDir(hooksConfigDir);
+    for (const [rel, content] of Object.entries(hookFiles)) {
+      const dest = path.join(hooksTargetDir, rel);
+      if (!fs.existsSync(dest)) {
+        ensureDir(path.dirname(dest));
+        fs.writeFileSync(dest, content);
+        hooksAdded++;
       }
-    } else {
-      // Default: add new files, skip modified, keep removed
-      // (merge mode)
-      filesToUpdate = [];
-      filesToRemove = [];
-
-      if (diff.modified.length > 0) {
-        console.log(chalk.gray(`\n   Skipping ${diff.modified.length} modified files (use --force to overwrite)`));
-      }
     }
 
-    // Apply changes
-    let addedCount = 0;
-    let updatedCount = 0;
-    let removedCount = 0;
-
-    for (const rel of filesToAdd) {
-      const src = path.join(configDir, rel);
-      const dest = path.join(claudeDir, rel);
-      ensureDir(path.dirname(dest));
-      fs.copyFileSync(src, dest);
-      addedCount++;
-    }
-
-    for (const rel of filesToUpdate) {
-      const src = path.join(configDir, rel);
-      const dest = path.join(claudeDir, rel);
-      ensureDir(path.dirname(dest));
-      fs.copyFileSync(src, dest);
-      updatedCount++;
-    }
-
-    for (const rel of filesToRemove) {
-      const dest = path.join(claudeDir, rel);
-      if (fs.existsSync(dest)) {
-        fs.unlinkSync(dest);
-        removedCount++;
-      }
-    }
-
-    if (addedCount > 0 || updatedCount > 0 || removedCount > 0) {
-      console.log('\n   Applied:');
-      if (addedCount > 0) console.log(chalk.green(`   + ${addedCount} files added`));
-      if (updatedCount > 0) console.log(chalk.yellow(`   ~ ${updatedCount} files updated`));
-      if (removedCount > 0) console.log(chalk.red(`   - ${removedCount} files removed`));
+    if (hooksAdded > 0) {
+      console.log(chalk.green(`   + ${hooksAdded} new hooks added`));
       hasChanges = true;
     }
   }
@@ -256,17 +305,61 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
     }
   }
 
-  // Update metadata (refresh file hashes for copy mode)
+  // Update metadata
   meta.updatedAt = new Date().toISOString();
-  if (meta.mode === 'copy') {
-    meta.fileHashes = computeFileHashes(claudeDir);
-  }
+  delete meta.mode; // remove deprecated field
+  meta.fileHashes = computeFileHashes(claudeDir);
   fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
 
   if (hasChanges) {
     console.log('\n✅ Update complete!\n');
   } else {
     console.log('\n✅ Already up to date!\n');
+  }
+}
+
+function migrateFromSymlink(claudeDir: string, meta: DotrulesMeta, metaPath: string): void {
+  console.log(chalk.yellow('   ⚡ Migrating from symlink to copy mode...\n'));
+
+  const categories = ['rules', 'commands', 'skills', 'agents', 'contexts'];
+  let migrated = 0;
+
+  for (const category of categories) {
+    const targetPath = path.join(claudeDir, category);
+    if (!fs.existsSync(targetPath)) continue;
+
+    try {
+      const stat = fs.lstatSync(targetPath);
+      if (!stat.isSymbolicLink()) continue;
+
+      // Read files through symlink before removing it
+      const files = scanDir(targetPath);
+
+      // Remove symlink
+      fs.unlinkSync(targetPath);
+
+      // Create directory and copy files
+      ensureDir(targetPath);
+      for (const [rel, content] of Object.entries(files)) {
+        const dest = path.join(targetPath, rel);
+        ensureDir(path.dirname(dest));
+        fs.writeFileSync(dest, content);
+      }
+
+      migrated++;
+    } catch {
+      // Skip on error
+    }
+  }
+
+  // Update meta
+  delete meta.mode;
+  meta.fileHashes = computeFileHashes(claudeDir);
+  meta.updatedAt = new Date().toISOString();
+  fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
+
+  if (migrated > 0) {
+    console.log(chalk.green(`   ✓ Migrated ${migrated} symlinks to copies\n`));
   }
 }
 

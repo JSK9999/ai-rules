@@ -5,7 +5,6 @@ import { cloneRepo, getRepoName, normalizeGitUrl } from '../utils/git.js';
 
 interface DotrulesMeta {
   version: string;
-  mode: 'symlink' | 'copy';
   sources: Array<{
     name: string;
     url?: string;

@@ -26,15 +26,14 @@ export async function doctor(): Promise<void> {
       message: `Found ${install.scope} installation at ${install.configPath}`,
     });
 
-    // Check mode
     const metaPath = path.join(install.configPath, 'meta.json');
     if (fs.existsSync(metaPath)) {
       try {
-        const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+        JSON.parse(fs.readFileSync(metaPath, 'utf8'));
         results.push({
-          name: 'Mode',
+          name: 'Metadata',
           status: 'ok',
-          message: `${meta.mode} mode`,
+          message: 'meta.json valid',
         });
       } catch {
         results.push({
@@ -93,7 +92,7 @@ export async function doctor(): Promise<void> {
           name: dir.label,
           status: 'warn',
           message: `Missing: ${missing.join(', ')}`,
-          fix: 'Run: ai-nexus install --copy',
+          fix: 'Run: ai-nexus install',
         });
       }
     }
