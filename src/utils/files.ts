@@ -110,6 +110,27 @@ function stripFrontmatter(content: string): string {
 }
 
 /**
+ * Collect all .md files from a category directory, including SKILL.md in subdirectories.
+ */
+function collectMdFiles(catDir: string): string[] {
+  const files: string[] = [];
+  const entries = fs.readdirSync(catDir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(entry.name);
+    } else if (entry.isDirectory()) {
+      const skillMd = path.join(catDir, entry.name, 'SKILL.md');
+      if (fs.existsSync(skillMd)) {
+        files.push(path.join(entry.name, 'SKILL.md'));
+      }
+    }
+  }
+
+  return files;
+}
+
+/**
  * Aggregate rule files into a single AGENTS.md content string.
  * If selectedFiles is provided, only those files are included.
  * Otherwise, all .md files in each category directory are included.
@@ -128,8 +149,7 @@ export function aggregateToAgentsMd(configDir: string, selectedFiles?: Record<st
     if (selectedFiles && selectedFiles[category]) {
       files = selectedFiles[category];
     } else {
-      // Scan all .md files in the category directory
-      files = fs.readdirSync(catDir).filter(f => f.endsWith('.md'));
+      files = collectMdFiles(catDir);
     }
 
     if (files.length === 0) continue;
