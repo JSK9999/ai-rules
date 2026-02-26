@@ -136,6 +136,8 @@ alwaysApply: false
 
 개별 룰 파일들이 단일 `AGENTS.md` 파일로 자동 병합되며, 세션 시작 시 로드됩니다. 동적 로딩 없음.
 
+> **Codex 사용자: 필요한 룰만 선택하세요.** 모든 룰이 매 세션마다 로딩되므로, 너무 많이 설치하면 토큰이 낭비됩니다. 대화형 설치 마법사(`npx ai-nexus install`)에서 필요한 카테고리와 파일만 선택하세요. 권장 시작 세트: `rules/essential.md`, `rules/commit.md`, `rules/security.md`.
+
 ---
 
 ## 명령어

@@ -136,6 +136,8 @@ After conversion, **Cursor's built-in semantic search** handles rule filtering â
 
 Individual rule files are aggregated into a single `AGENTS.md` file, which is loaded at session start. No dynamic loading.
 
+> **Codex users: select only the rules you need.** Since all rules are loaded every session, installing too many wastes tokens. Use the interactive wizard (`npx ai-nexus install`) to pick only relevant categories and files. Recommended starting set: `rules/essential.md`, `rules/commit.md`, `rules/security.md`.
+
 ---
 
 ## Commands
