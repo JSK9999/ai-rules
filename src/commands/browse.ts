@@ -4,7 +4,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'url';
-import { fetchRegistry, fetchFileContent, searchFiles, extractDescription, type RegistryFile } from '../utils/registry.js';
+import { fetchRegistry, fetchFileContent, searchFiles, extractDescription } from '../utils/registry.js';
 import { detectInstall, ensureDir } from '../utils/files.js';
 import { scanConfigDir } from '../utils/config-scanner.js';
 

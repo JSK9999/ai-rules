@@ -179,8 +179,6 @@ export async function doctor(): Promise<void> {
   // Check 5: API Keys for semantic routing
   const hasOpenAI = !!process.env.OPENAI_API_KEY;
   const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
-  const routerEnabled = process.env.SEMANTIC_ROUTER_ENABLED !== 'false';
-
   if (hasOpenAI || hasAnthropic) {
     results.push({
       name: 'AI Routing',

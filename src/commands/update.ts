@@ -93,8 +93,8 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
     if (diff.removed.length > 0) console.log(chalk.red(`   - ${diff.removed.length} removed in source`));
 
     // Determine which files to update
-    let filesToAdd = diff.added;
-    let filesToUpdate: string[] = [];
+    const filesToAdd = diff.added;
+    let filesToUpdate: string[];
     let filesToRemove: string[] = [];
 
     if (options.force) {

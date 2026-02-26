@@ -28,7 +28,7 @@ export async function add(source: string, options: AddOptions): Promise<void> {
     process.exit(1);
   }
 
-  const { configPath, scope } = install;
+  const { configPath } = install;
 
   console.log(`\n📥 Adding rule source: ${source}\n`);
 

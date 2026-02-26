@@ -7,7 +7,6 @@ import {
   getTargetDir,
   getConfigPath,
   ensureDir,
-  copyFile,
   createSymlink,
   scanDir,
   computeFileHashes,
@@ -107,7 +106,7 @@ export async function init(options: InitOptions): Promise<void> {
         }
         // Remove existing symlink to recreate
         fs.unlinkSync(targetPath);
-      } catch (e) {
+      } catch {
         // Ignore errors
       }
     }

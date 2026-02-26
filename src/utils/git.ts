@@ -1,6 +1,5 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
-import path from 'path';
 
 export interface RuleSource {
   name: string;
@@ -15,7 +14,7 @@ export function parseGitUrl(url: string): { host: string; owner: string; repo: s
   // - https://github.com/org/repo
   // - git@github.com:org/repo.git
 
-  let normalized = url
+  const normalized = url
     .replace(/^(https?:\/\/)?/, '')
     .replace(/^git@/, '')
     .replace(/\.git$/, '')

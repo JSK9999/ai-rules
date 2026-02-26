@@ -14,7 +14,7 @@ import {
   computeFileHashes,
   aggregateToAgentsMd,
 } from '../utils/files.js';
-import { scanConfigDir, type ConfigFile } from '../utils/config-scanner.js';
+import { scanConfigDir } from '../utils/config-scanner.js';
 import type { DotrulesMeta } from '../types.js';
 
 // Convert .md to .mdc format for Cursor
@@ -125,7 +125,7 @@ export async function initInteractive(): Promise<void> {
     },
   ]);
 
-  let selectedFiles: Record<string, string[]> = {};
+  const selectedFiles: Record<string, string[]> = {};
 
   if (detailSelect) {
     for (const category of categories) {
@@ -383,7 +383,7 @@ async function install(selections: Selections): Promise<void> {
           }
           // Symlink - remove and recreate
           fs.unlinkSync(targetPath);
-        } catch (e) {
+        } catch {
           // Ignore errors
         }
       }
