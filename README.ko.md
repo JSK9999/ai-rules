@@ -362,7 +362,7 @@ Selected rules (3):
 ```bash
 # 기여자 빠른 시작
 git clone https://github.com/JSK9999/ai-nexus.git
-cd ai-rules && npm install && npm run build
+cd ai-nexus && npm install && npm run build
 
 # config/rules/에 룰 추가 후 테스트:
 node bin/ai-rules.cjs test "your prompt"

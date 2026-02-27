@@ -362,7 +362,7 @@ We welcome rule contributions! Contributed rules are instantly available via `ai
 ```bash
 # Quick start for contributors
 git clone https://github.com/JSK9999/ai-nexus.git
-cd ai-rules && npm install && npm run build
+cd ai-nexus && npm install && npm run build
 
 # Add your rule to config/rules/, then test:
 node bin/ai-rules.cjs test "your prompt"
