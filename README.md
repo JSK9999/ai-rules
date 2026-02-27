@@ -22,6 +22,8 @@ npx ai-nexus install
 
 Every AI coding tool has its own rule format — `.claude/rules/*.md`, `.cursor/rules/*.mdc`, `.codex/AGENTS.md`. You end up maintaining the same rules in multiple places, and they inevitably drift apart. On top of that, every prompt loads all your rules, wasting tokens on irrelevant context.
 
+A [recent study from ETH Zurich](https://arxiv.org/pdf/2602.11988) (138 repos, 5,694 PRs) confirms this: **loading all rules at once hurts performance by ~3% and increases cost by 20%+.** Even hand-written context files only helped by 4% — and only when kept under 30 lines. The takeaway: less is more, and only relevant rules should be loaded per prompt.
+
 ## The Solution
 
 **ai-nexus** lets you write rules once and distribute them across all your tools — while keeping token usage minimal with smart rule loading:
