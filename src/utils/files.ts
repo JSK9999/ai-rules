@@ -122,7 +122,13 @@ function collectMdFiles(catDir: string): string[] {
     } else if (entry.isDirectory()) {
       const skillMd = path.join(catDir, entry.name, 'SKILL.md');
       if (fs.existsSync(skillMd)) {
-        files.push(path.join(entry.name, 'SKILL.md'));
+        try {
+          if (fs.statSync(skillMd).isFile()) {
+            files.push(path.join(entry.name, 'SKILL.md'));
+          }
+        } catch {
+          // Ignore invalid entries
+        }
       }
     }
   }
@@ -160,6 +166,13 @@ export function aggregateToAgentsMd(configDir: string, selectedFiles?: Record<st
     for (const file of files) {
       const filePath = path.join(catDir, file);
       if (!fs.existsSync(filePath)) continue;
+
+      try {
+        const stat = fs.statSync(filePath);
+        if (!stat.isFile()) continue;
+      } catch {
+        continue;
+      }
 
       const raw = fs.readFileSync(filePath, 'utf8');
       const body = stripFrontmatter(raw);

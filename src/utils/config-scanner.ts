@@ -81,8 +81,10 @@ function scanCategoryDir(dir: string, category: string): ConfigFile[] {
 
     if (entry.isDirectory()) {
       // Scan subdirectory
-      const subFiles = fs.readdirSync(fullPath).filter(f => f.endsWith('.md'));
-      for (const subFile of subFiles) {
+      const subEntries = fs.readdirSync(fullPath, { withFileTypes: true });
+      for (const subEntry of subEntries) {
+        if (!subEntry.isFile() || !subEntry.name.endsWith('.md')) continue;
+        const subFile = subEntry.name;
         const subFilePath = path.join(fullPath, subFile);
         const meta = parseFileMeta(subFilePath);
         files.push({
@@ -93,7 +95,7 @@ function scanCategoryDir(dir: string, category: string): ConfigFile[] {
           category,
         });
       }
-    } else if (entry.name.endsWith('.md')) {
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
       const meta = parseFileMeta(fullPath);
       files.push({
         name: meta.name,
