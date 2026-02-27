@@ -286,6 +286,27 @@ npx ai-nexus update
 
 ---
 
+## 네트워크 & 개인정보
+
+ai-nexus는 로컬에서 실행됩니다. 아래는 이 도구가 수행할 수 있는 모든 네트워크 요청 목록입니다:
+
+| 시점 | 대상 | 목적 | 필수 여부 |
+|------|------|------|-----------|
+| 시맨틱 라우팅 (프롬프트마다) | `api.openai.com` | GPT-4o-mini를 통한 AI 룰 선택 | **옵트인 전용** — `SEMANTIC_ROUTER_ENABLED=true` + `OPENAI_API_KEY` 필요 |
+| 시맨틱 라우팅 (프롬프트마다) | `api.anthropic.com` | Claude Haiku를 통한 AI 룰 선택 | **옵트인 전용** — `SEMANTIC_ROUTER_ENABLED=true` + `ANTHROPIC_API_KEY` 필요 |
+| `search`, `get`, `browse` | `api.github.com` | 커뮤니티 룰 레지스트리 조회 | 해당 명령어 실행 시에만 |
+| `get` | `raw.githubusercontent.com` | 룰 파일 콘텐츠 다운로드 | `get` 실행 시에만 |
+| `browse` | `localhost:3847` | 마켓플레이스 UI용 로컬 전용 HTTP 서버 | `127.0.0.1`에 바인딩 — 외부 접근 불가 |
+| `install --rules <url>` | Git 원격 호스트 | 팀 룰 저장소 클론 | `--rules` URL 제공 시에만 |
+
+**텔레메트리 없음. 분석 수집 없음. 외부 데이터 전송 없음.**
+
+- API 키는 환경 변수에서만 읽으며, 디스크에 저장하거나 로깅하지 않습니다.
+- 프롬프트가 OpenAI/Anthropic으로 전송되는 것은 시맨틱 라우팅을 **명시적으로 활성화**한 경우에만 해당됩니다. 비활성화 시 키워드 기반 폴백이 완전히 오프라인으로 동작합니다.
+- `browse` 서버는 `127.0.0.1`에 바인딩되어 네트워크에서 접근할 수 없습니다.
+
+---
+
 ## 룰 마켓플레이스
 
 ![browse](https://raw.githubusercontent.com/JSK9999/ai-nexus/main/docs/nexus-marketplace.png)
