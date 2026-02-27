@@ -365,7 +365,7 @@ git clone https://github.com/JSK9999/ai-nexus.git
 cd ai-nexus && npm install && npm run build
 
 # Add your rule to config/rules/, then test:
-node bin/ai-rules.cjs test "your prompt"
+node bin/ai-nexus.cjs test "your prompt"
 ```
 
 ---

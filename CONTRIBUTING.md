@@ -56,7 +56,7 @@ config/skills/react-nextjs.md     # scope included
 npm install && npm run build
 
 # Test which rules activate for a prompt
-node bin/ai-rules.cjs test "your test prompt here"
+node bin/ai-nexus.cjs test "your test prompt here"
 ```
 
 ### 6. Submit a PR

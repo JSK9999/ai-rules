@@ -365,7 +365,7 @@ git clone https://github.com/JSK9999/ai-nexus.git
 cd ai-nexus && npm install && npm run build
 
 # config/rules/에 룰 추가 후 테스트:
-node bin/ai-rules.cjs test "your prompt"
+node bin/ai-nexus.cjs test "your prompt"
 ```
 
 ---

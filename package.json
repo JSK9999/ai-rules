@@ -4,7 +4,7 @@
   "description": "Unified rule manager for Claude Code, Cursor, and Codex - write once, use everywhere, save tokens",
   "main": "dist/index.js",
   "bin": {
-    "ai-nexus": "bin/ai-rules.cjs"
+    "ai-nexus": "bin/ai-nexus.cjs"
   },
   "type": "module",
   "scripts": {
