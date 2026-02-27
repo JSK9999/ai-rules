@@ -133,8 +133,16 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   }
 
   // Step 3: Compare .ai-nexus/config vs .claude/ and sync
+  // Only compare files within tracked categories — exclude settings.json,
+  // rules-inactive/ (managed by semantic router), and any other untracked files.
+  const TRACKED_CATEGORIES = ['rules', 'commands', 'skills', 'agents', 'contexts', 'hooks'];
   const sourceFiles = scanDir(configDir);
-  const installedFiles = scanDir(claudeDir);
+  const allInstalledFiles = scanDir(claudeDir);
+  const installedFiles = Object.fromEntries(
+    Object.entries(allInstalledFiles).filter(([rel]) =>
+      TRACKED_CATEGORIES.some(cat => rel.startsWith(cat + '/') || rel.startsWith(cat + '\\'))
+    )
+  ) as typeof allInstalledFiles;
   const diff = compareConfigs(sourceFiles, installedFiles);
 
   if (diff.added.length === 0 && diff.modified.length === 0 && diff.removed.length === 0) {
