@@ -87,7 +87,7 @@ PRs are reviewed based on:
 
 ```bash
 git clone https://github.com/JSK9999/ai-nexus.git
-cd ai-rules
+cd ai-nexus
 npm install
 npm run build
 npm test
