@@ -25,8 +25,7 @@ export async function list(): Promise<void> {
   if (fs.existsSync(metaPath)) {
     const meta: DotrulesMeta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
     console.log(`  Scope:   ${scope}`);
-    console.log(`  Mode:    ${meta.mode}`);
-    console.log(`  Sources: ${meta.sources.map(s => s.type === 'external' ? `${s.name} (${s.url})` : s.name).join(', ')}`);
+    console.log(`  Sources: ${(meta.sources ?? []).map(s => s.type === 'external' ? `${s.name} (${s.url})` : s.name).join(', ')}`);
   }
 
   // List files by category with descriptions

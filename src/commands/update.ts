@@ -40,7 +40,7 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   }
 
   const meta: DotrulesMeta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-  console.log(`   Sources: ${meta.sources.map(s => s.name).join(', ')}\n`);
+  console.log(`   Sources: ${(meta.sources ?? []).map(s => s.name).join(', ')}\n`);
 
   const configDir = path.join(configPath, 'config');
   const targetDir = scope === 'global' ? os.homedir() : process.cwd();
@@ -84,7 +84,7 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
   // Step 2: Update external sources and re-merge new files
   const sourcesDir = path.join(configPath, 'sources');
 
-  for (const source of meta.sources) {
+  for (const source of (meta.sources ?? [])) {
     if (source.type === 'external' && source.url) {
       const repoPath = path.join(sourcesDir, source.name);
       console.log(`   📥 Updating ${source.name}...`);
