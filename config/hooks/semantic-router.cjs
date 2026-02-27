@@ -2,10 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-// Configuration - Use home directory's .claude
+// Configuration - detect project vs global install
 const os = require('os');
-const RULES_DIR = path.join(os.homedir(), '.claude/rules');
-const INACTIVE_DIR = path.join(os.homedir(), '.claude/rules-inactive');
+const _projectRules = path.join(process.cwd(), '.claude/rules');
+const RULES_DIR = fs.existsSync(_projectRules)
+  ? _projectRules
+  : path.join(os.homedir(), '.claude/rules');
+const INACTIVE_DIR = RULES_DIR.replace(/rules$/, 'rules-inactive');
 const SEMANTIC_ROUTER_ENABLED = process.env.SEMANTIC_ROUTER_ENABLED !== 'false';
 
 // Static keyword map (fallback for files without frontmatter)
@@ -279,7 +282,33 @@ async function route(userPrompt) {
 }
 
 // Hook Entry Point
-const userPrompt = process.argv[2];
-if (userPrompt) {
-  route(userPrompt);
+// Claude Code passes UserPromptSubmit data via stdin as JSON: {"prompt": "..."}
+// Also support argv[2] for direct CLI testing (ai-nexus test)
+function getPrompt() {
+  return new Promise((resolve) => {
+    // If called with an argument directly, use it
+    if (process.argv[2]) {
+      resolve(process.argv[2]);
+      return;
+    }
+
+    // Otherwise read from stdin (Claude Code hook format)
+    let data = '';
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('data', chunk => { data += chunk; });
+    process.stdin.on('end', () => {
+      try {
+        const json = JSON.parse(data);
+        resolve(json.prompt || null);
+      } catch {
+        resolve(data.trim() || null);
+      }
+    });
+    // If stdin is not a pipe (e.g., terminal), don't hang
+    if (process.stdin.isTTY) resolve(null);
+  });
 }
+
+getPrompt().then(prompt => {
+  if (prompt) route(prompt).catch(err => console.error('[Semantic Router] Error:', err));
+});

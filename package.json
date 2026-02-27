@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc && cp -r src/browse dist/",
     "dev": "tsc --watch",
-    "test": "vitest",
+    "test": "vitest run",
     "lint": "eslint src/",
     "prepare": "npm run build"
   },
