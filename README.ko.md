@@ -2,9 +2,8 @@
 
 # ai-nexus
 
-> 룰을 한 번 작성하세요. 어디서든 사용하세요. 토큰도 절약하세요.
-
-**Claude Code**, **Cursor**, **Codex**를 위한 통합 룰 매니저.
+> Claude Code는 매 세션마다 모든 규칙을 컨텍스트에 로드합니다.
+> ai-nexus는 필요한 것만 로드하고, Claude, Cursor, Codex 간 규칙을 동기화합니다.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)

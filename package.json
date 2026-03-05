@@ -1,7 +1,7 @@
 {
   "name": "ai-nexus",
   "version": "1.4.3",
-  "description": "Unified rule manager for Claude Code, Cursor, and Codex - write once, use everywhere, save tokens",
+  "description": "Claude Code loads all rules every session - ai-nexus loads only what you need, syncing rules across Claude, Cursor, and Codex",
   "main": "dist/index.js",
   "bin": {
     "ai-nexus": "bin/ai-nexus.cjs"
