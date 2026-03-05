@@ -368,7 +368,9 @@ Preview which rules would load for a given prompt:
 ```bash
 $ npx ai-nexus test "write a react component with hooks"
 
-Selected rules (3):
+Method: Keyword matching
+
+Selected files (3):
   • rules/essential.md
   • rules/react.md
   • skills/react.md

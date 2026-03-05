@@ -368,7 +368,9 @@ npx ai-nexus get commit.md --category commands
 ```bash
 $ npx ai-nexus test "react 컴포넌트에 hooks 사용해서 작성해줘"
 
-Selected rules (3):
+Method: Keyword matching
+
+Selected files (3):
   • rules/essential.md
   • rules/react.md
   • skills/react.md

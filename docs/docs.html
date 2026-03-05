@@ -380,11 +380,13 @@ Your rule content...</code></pre>
       <p>Test that the semantic router is working:</p>
       <pre><code><span class="cm">$</span> <span class="hl">npx ai-nexus test "write a react component"</span>
 
-Selected rules (semantic):
+Method: AI (Semantic Router)
+
+Selected files (3):
   • rules/essential.md
   • skills/react.md
   • rules/typescript.md</code></pre>
-      <p>If the output shows <code>(semantic)</code>, AI routing is active. If it shows <code>(keyword)</code>, check that your API key and <code>SEMANTIC_ROUTER_ENABLED</code> are set correctly.</p>
+      <p>If the output shows <code>AI (Semantic Router)</code>, AI routing is active. If it shows <code>Keyword matching</code>, check that your API key and <code>SEMANTIC_ROUTER_ENABLED</code> are set correctly.</p>
 
       <div class="callout">
         <strong>Security note:</strong> API keys are read from environment variables only — never stored on disk or logged by ai-nexus.
