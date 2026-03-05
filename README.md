@@ -2,9 +2,8 @@
 
 # ai-nexus
 
-> Write rules once. Use everywhere. Save tokens.
-
-Unified rule manager for **Claude Code**, **Cursor**, and **Codex**.
+> Claude Code loads all rules into context every session.
+> ai-nexus loads only what you need — and syncs rules across Claude, Cursor, and Codex.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
