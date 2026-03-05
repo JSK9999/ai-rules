@@ -1,6 +1,6 @@
 {
   "name": "ai-nexus",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Claude Code loads all rules every session - ai-nexus loads only what you need, syncing rules across Claude, Cursor, and Codex",
   "main": "dist/index.js",
   "bin": {
