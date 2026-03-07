@@ -10,6 +10,8 @@ const RULES_DIR = fs.existsSync(_projectRules)
   : path.join(os.homedir(), '.claude/rules');
 const INACTIVE_DIR = RULES_DIR.replace(/rules$/, 'rules-inactive');
 const SEMANTIC_ROUTER_ENABLED = process.env.SEMANTIC_ROUTER_ENABLED === 'true';
+const PROMPT_COMPRESSION_ENABLED = process.env.PROMPT_COMPRESSION_ENABLED === 'true';
+const COMPRESSED_FILE = '_compressed-context.md';
 
 // Static keyword map (fallback for files without frontmatter)
 const STATIC_KEYWORD_MAP = {
@@ -32,7 +34,7 @@ function buildKeywordMap() {
 
   for (const dir of dirs) {
     if (!fs.existsSync(dir)) continue;
-    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md') && f !== COMPRESSED_FILE);
 
     for (const file of files) {
       if (keywordMap[file]) continue; // static map takes precedence
@@ -204,6 +206,43 @@ Example: ["react.md", "typescript.md"]
   });
 }
 
+// ─── Heuristic compression (zero deps) ─────────────────────────────────────
+function stripFrontmatter(content) {
+  return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n*/, '').trim();
+}
+function collapseBlankLines(content) {
+  return content.replace(/\n{3,}/g, '\n\n');
+}
+function removeFillerPhrases(content) {
+  return content
+    .replace(/\b(it is )?important to\s+/gi, '')
+    .replace(/\b(you should )?always remember to\s+/gi, '')
+    .replace(/\b(please )?make sure to\s+/gi, '')
+    .replace(/\b(be )?sure to\s+/gi, '')
+    .replace(/\bin order to\s+/gi, ' ')
+    .replace(/\b(so )?that (you|we) can\s+/gi, ' ');
+}
+function deduplicateBullets(content) {
+  const lines = content.split('\n');
+  const seen = new Set();
+  const result = [];
+  for (const line of lines) {
+    const normalized = line.replace(/^[\s\-*]+/, '').trim().toLowerCase();
+    if (normalized.length < 5) { result.push(line); continue; }
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(line);
+  }
+  return result.join('\n');
+}
+function compressRuleContent(content) {
+  let r = stripFrontmatter(content);
+  r = removeFillerPhrases(r);
+  r = deduplicateBullets(r);
+  r = collapseBlankLines(r);
+  return r.trim();
+}
+
 // Helper: Keyword fallback
 function selectByKeywords(prompt, keywordMap) {
   const selected = [];
@@ -226,7 +265,7 @@ async function route(userPrompt) {
 
     // 1. Identify all managed files (active + inactive)
     let activeFiles = [];
-    try { activeFiles = fs.readdirSync(RULES_DIR).filter(f => f.endsWith('.md')); } catch(e) {}
+    try { activeFiles = fs.readdirSync(RULES_DIR).filter(f => f.endsWith('.md') && f !== COMPRESSED_FILE); } catch(e) {}
     let inactiveFiles = [];
     try { inactiveFiles = fs.readdirSync(INACTIVE_DIR).filter(f => f.endsWith('.md')); } catch(e) {}
 
@@ -253,25 +292,60 @@ async function route(userPrompt) {
 
     desiredFiles = [...new Set(desiredFiles)];
 
-    // 3. Swap files
-    for (const file of activeFiles) {
-      if (keywordMap[file] && !desiredFiles.includes(file) && !ALWAYS_ACTIVE.includes(file)) {
-        const src = path.join(RULES_DIR, file);
-        const dest = path.join(INACTIVE_DIR, file);
+    if (PROMPT_COMPRESSION_ENABLED) {
+      // Compression mode: merge selected rules into one compressed file
+      // 1. Move all .md from rules/ to inactive (so we have originals)
+      for (const f of activeFiles) {
+        const src = path.join(RULES_DIR, f);
         if (fs.existsSync(src)) {
-          fs.renameSync(src, dest);
-          console.log(`[Router] Deactivated: ${file}`);
+          fs.renameSync(src, path.join(INACTIVE_DIR, f));
         }
       }
-    }
-
-    for (const file of desiredFiles) {
-      if (allManagedFiles.includes(file)) {
-        const inactivePath = path.join(INACTIVE_DIR, file);
-        const activePath = path.join(RULES_DIR, file);
-        if (fs.existsSync(inactivePath)) {
-          fs.renameSync(inactivePath, activePath);
-          console.log(`[Router] Activated: ${file}`);
+      const compressedPath = path.join(RULES_DIR, COMPRESSED_FILE);
+      if (fs.existsSync(compressedPath)) {
+        fs.unlinkSync(compressedPath);
+      }
+      // 2. Read desired files, compress, write single file
+      const parts = [];
+      for (const file of desiredFiles) {
+        const p1 = path.join(INACTIVE_DIR, file);
+        const p2 = path.join(RULES_DIR, file);
+        const filePath = fs.existsSync(p1) ? p1 : p2;
+        if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, 'utf8');
+          const compressed = compressRuleContent(content);
+          parts.push(`<!-- rules/${file} -->\n${compressed}`);
+        }
+      }
+      if (parts.length > 0) {
+        fs.writeFileSync(compressedPath, parts.join('\n\n'), 'utf8');
+        console.log(`[Router] Compressed ${parts.length} rules → ${COMPRESSED_FILE}`);
+      }
+    } else {
+      // Normal mode: swap individual files
+      const compressedPath = path.join(RULES_DIR, COMPRESSED_FILE);
+      if (fs.existsSync(compressedPath)) {
+        fs.unlinkSync(compressedPath);
+        console.log(`[Router] Removed ${COMPRESSED_FILE}`);
+      }
+      for (const file of activeFiles) {
+        if (keywordMap[file] && !desiredFiles.includes(file) && !ALWAYS_ACTIVE.includes(file)) {
+          const src = path.join(RULES_DIR, file);
+          const dest = path.join(INACTIVE_DIR, file);
+          if (fs.existsSync(src)) {
+            fs.renameSync(src, dest);
+            console.log(`[Router] Deactivated: ${file}`);
+          }
+        }
+      }
+      for (const file of desiredFiles) {
+        if (allManagedFiles.includes(file)) {
+          const inactivePath = path.join(INACTIVE_DIR, file);
+          const activePath = path.join(RULES_DIR, file);
+          if (fs.existsSync(inactivePath)) {
+            fs.renameSync(inactivePath, activePath);
+            console.log(`[Router] Activated: ${file}`);
+          }
         }
       }
     }

@@ -48,6 +48,7 @@ Only relevant rules loaded per prompt.
 | | Benefit | Detail |
 |---|---|---|
 | **Only relevant rules loaded** | Hundreds of rules installed, only 2-3 loaded per prompt | Semantic Router analyzes your prompt and picks just the rules you need. No unnecessary context = better AI responses + less token waste. |
+| **Prompt compression** | ~35% fewer tokens on loaded rules | Set `PROMPT_COMPRESSION_ENABLED=true` to merge and compress selected rules. Combined with selective loading: ~70–85% total savings. |
 | **Write once, deploy everywhere** | One rule file → three tools | Write a single `.md` rule. ai-nexus auto-converts to `.mdc` for Cursor and `AGENTS.md` for Codex. No more copy-pasting. |
 | **AI-powered rule selection** | GPT-4o-mini or Claude Haiku picks rules for you | A hook runs on every prompt, loading only what you need. Costs ~$0.50/month. Falls back to keyword matching with zero cost. |
 | **Team-wide consistency** | Git-based rule sharing | Everyone installs from the same repo. `npx ai-nexus update` keeps the whole team in sync. |

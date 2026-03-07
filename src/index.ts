@@ -3,6 +3,7 @@ export * from './utils/files.js';
 export * from './utils/git.js';
 export * from './utils/semantic-router.js';
 export * from './utils/config-scanner.js';
+export * from './utils/compression.js';
 export { init } from './commands/init.js';
 export { initInteractive } from './commands/init-interactive.js';
 export { update } from './commands/update.js';

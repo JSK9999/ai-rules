@@ -99,7 +99,21 @@ SEMANTIC_ROUTER_ENABLED=true
 # API keys for AI-based routing (optional)
 OPENAI_API_KEY=sk-xxx
 ANTHROPIC_API_KEY=sk-ant-xxx
+
+# Enable prompt compression (combines with selective loading for ~70-85% token savings)
+PROMPT_COMPRESSION_ENABLED=true
 ```
+
+## Prompt Compression
+
+When `PROMPT_COMPRESSION_ENABLED=true`, the semantic router merges selected rules into a single compressed file (`_compressed-context.md`) using heuristic redundancy removal:
+
+- Strips frontmatter
+- Removes filler phrases
+- Deduplicates repeated bullets across rules
+- Collapses whitespace
+
+**Combined savings**: Selective loading (~50%) + compression (~35%) ≈ **70% total**. See [docs/research/prompt-compression.md](../../docs/research/prompt-compression.md) for LLMLingua and semantic summarization options.
 
 ## Token Efficiency
 
