@@ -256,7 +256,7 @@ Selected rules (3):
       <h2 id="how-it-works">동작 원리</h2>
 
       <h3>Claude Code: 시맨틱 라우터</h3>
-      <p><a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent)">ETH Zurich 연구</a> (138개 레포, 5,694개 PR)에 따르면 모든 규칙을 한 번에 로딩하면 성능이 ~3% 저하되고 비용이 20% 이상 증가합니다. 시맨틱 라우터가 이를 해결합니다 — 매 프롬프트마다 훅이 실행되어 실제로 필요한 규칙을 분석합니다:</p>
+      <p><a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent)">ETH Zurich 연구</a> (12개 레포, 5,694개 PR)에 따르면 모든 규칙을 한 번에 로딩하면 성능이 ~3% 저하되고 비용이 20% 이상 증가합니다. 시맨틱 라우터가 이를 해결합니다 — 매 프롬프트마다 훅이 실행되어 실제로 필요한 규칙을 분석합니다:</p>
       <ul>
         <li><strong>AI 라우팅 사용</strong> (권장) &mdash; GPT-4o-mini 또는 Claude Haiku가 프롬프트를 분석하고 적절한 규칙을 선택. 비용: 월 ~$0.50.</li>
         <li><strong>AI 미사용</strong> (폴백) &mdash; 키워드 매칭으로 프롬프트의 단어를 기반으로 규칙 활성화.</li>
