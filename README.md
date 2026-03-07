@@ -396,6 +396,14 @@ node bin/ai-nexus.cjs test "your prompt"
 
 ---
 
+## Support
+
+If you find ai-nexus useful, give it a ⭐ on GitHub — it helps others discover the project and motivates continued development.
+
+[![Star on GitHub](https://img.shields.io/github/stars/JSK9999/ai-nexus?style=social)](https://github.com/JSK9999/ai-nexus)
+
+---
+
 ## License
 
 Apache 2.0
