@@ -1,6 +1,6 @@
 ---
 description: SQL database design and query optimization best practices
-keywords: [sql, database, schema, migration, query, index, normalization]
+keywords: [sql, database, db schema, sql migration, query, index, normalization]
 ---
 
 # SQL/Database Best Practices
@@ -40,6 +40,18 @@ keywords: [sql, database, schema, migration, query, index, normalization]
 ## Security
 
 - Use parameterized queries — never concatenate user input
+
+## Example (Parameterized Query)
+```sql
+-- Safe: parameterized query (Node.js/pg)
+const result = await db.query(
+  'SELECT * FROM users WHERE id = $1',
+  [userId]
+);
+
+-- Unsafe: never do this
+-- db.query('SELECT * FROM users WHERE id = ' + userId)
+```
 - Apply least-privilege for DB users
 - Avoid storing secrets; use connection strings from env
 - Audit sensitive operations (DDL, bulk deletes)
