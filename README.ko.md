@@ -396,6 +396,19 @@ node bin/ai-nexus.cjs test "your prompt"
 
 ---
 
+## FAQ
+
+**Claude Code 스킬(`alwaysApply: false`)이랑 뭐가 다른가요?**
+
+스킬은 이미 Claude Code 안에서 필요할 때만 로딩해줍니다. ai-nexus는 다른 유스케이스를 위한 거예요:
+- **여러 툴** (Claude Code + Cursor + Codex)을 같이 쓰면서 룰을 한 곳에서 관리하고 싶을 때
+- **230개 이상 커뮤니티 룰**을 직접 안 쓰고 바로 가져다 쓰고 싶을 때
+- Claude 대신 **키워드 매칭(무료)** 이나 **더 저렴한 모델**로 라우팅하고 싶을 때
+
+Claude Code만 쓰고 스킬로 충분하면 ai-nexus가 필요 없을 수도 있습니다.
+
+---
+
 ## 지원하기
 
 ai-nexus가 유용하셨다면 GitHub에서 ⭐을 눌러주세요 — 더 많은 사람들이 프로젝트를 발견하고, 개발을 이어가는 데 큰 힘이 됩니다.
