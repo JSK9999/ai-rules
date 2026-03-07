@@ -766,6 +766,7 @@
       <div class="container">
         <h2 class="section-title fade-in">Why ai-nexus?</h2>
         <p class="section-subtitle fade-in">Hundreds of rules installed, only 2-3 loaded. One source of truth for every tool.</p>
+        <p class="section-subtitle fade-in" style="margin-top:-40px;font-size:0.85rem;color:var(--text-tertiary)">A <a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent);text-decoration:none">study from ETH Zurich</a> (138 repos, 5,694 PRs) confirms: loading all rules at once hurts performance by ~3% and increases cost by 20%+.</p>
         <div class="comparison">
           <div class="comparison-card before fade-in">
             <h3>Before</h3>
@@ -901,6 +902,26 @@ Deploy everywhere:
             <code>ai-nexus test &lt;prompt&gt;</code>
             <span>Preview which rules would load</span>
           </div>
+          <div class="command-item fade-in fade-in-delay-4">
+            <code>ai-nexus list</code>
+            <span>Show installed rules</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus get &lt;filename&gt;</code>
+            <span>Download a rule from community registry</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus add &lt;url&gt;</code>
+            <span>Add rules from a Git repository</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus remove &lt;name&gt;</code>
+            <span>Remove a rule source</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus uninstall</code>
+            <span>Remove ai-nexus installation</span>
+          </div>
         </div>
       </div>
     </section>
@@ -947,6 +968,7 @@ Deploy everywhere:
 
   <footer>
     <div class="container">
+      <p style="margin-bottom:8px;color:var(--text-secondary);font-size:0.8rem">No telemetry. No analytics. No external data collection. AI routing is opt-in only.</p>
       <p>
         Apache 2.0 License &middot;
         <a href="https://github.com/JSK9999/ai-nexus">GitHub</a> &middot;
