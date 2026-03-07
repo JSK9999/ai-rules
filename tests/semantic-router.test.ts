@@ -46,5 +46,15 @@ describe('Semantic Router', () => {
       const files = selectFilesWithKeywords('review the security of this commit');
       expect(files.length).toBeGreaterThan(1);
     });
+
+    it('should select database skill for SQL/migration prompts', () => {
+      const files = selectFilesWithKeywords('write a SQL migration');
+      expect(files).toContain('skills/database.md');
+    });
+
+    it('should select database skill for schema design prompts', () => {
+      const files = selectFilesWithKeywords('design database schema');
+      expect(files).toContain('skills/database.md');
+    });
   });
 });
