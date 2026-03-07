@@ -256,7 +256,7 @@ Selected rules (3):
       <h2 id="how-it-works">How It Works</h2>
 
       <h3>Claude Code: Semantic Router</h3>
-      <p>A hook runs on every prompt, analyzing what rules you actually need:</p>
+      <p>A <a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent)">study from ETH Zurich</a> (138 repos, 5,694 PRs) found that loading all rules at once hurts performance by ~3% and increases cost by 20%+. The Semantic Router solves this — a hook runs on every prompt, analyzing what rules you actually need:</p>
       <ul>
         <li><strong>With AI routing</strong> (recommended) &mdash; GPT-4o-mini or Claude Haiku analyzes your prompt and picks the right rules. Cost: ~$0.50/month.</li>
         <li><strong>Without AI</strong> (fallback) &mdash; keyword matching activates rules based on words in your prompt.</li>
@@ -389,7 +389,7 @@ Selected files (3):
       <p>If the output shows <code>AI (Semantic Router)</code>, AI routing is active. If it shows <code>Keyword matching</code>, check that your API key and <code>SEMANTIC_ROUTER_ENABLED</code> are set correctly.</p>
 
       <div class="callout">
-        <strong>Security note:</strong> API keys are read from environment variables only — never stored on disk or logged by ai-nexus.
+        <strong>Privacy &amp; Security:</strong> No telemetry. No analytics. No external data collection. API keys are read from environment variables only — never stored on disk or logged. Your prompts are sent to OpenAI/Anthropic <strong>only</strong> when semantic routing is explicitly enabled. Without it, keyword-based fallback runs entirely offline.
       </div>
 
       <!-- Team Rules -->

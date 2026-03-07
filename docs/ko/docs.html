@@ -256,7 +256,7 @@ Selected rules (3):
       <h2 id="how-it-works">동작 원리</h2>
 
       <h3>Claude Code: 시맨틱 라우터</h3>
-      <p>매 프롬프트마다 훅이 실행되어 실제로 필요한 규칙을 분석합니다:</p>
+      <p><a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent)">ETH Zurich 연구</a> (138개 레포, 5,694개 PR)에 따르면 모든 규칙을 한 번에 로딩하면 성능이 ~3% 저하되고 비용이 20% 이상 증가합니다. 시맨틱 라우터가 이를 해결합니다 — 매 프롬프트마다 훅이 실행되어 실제로 필요한 규칙을 분석합니다:</p>
       <ul>
         <li><strong>AI 라우팅 사용</strong> (권장) &mdash; GPT-4o-mini 또는 Claude Haiku가 프롬프트를 분석하고 적절한 규칙을 선택. 비용: 월 ~$0.50.</li>
         <li><strong>AI 미사용</strong> (폴백) &mdash; 키워드 매칭으로 프롬프트의 단어를 기반으로 규칙 활성화.</li>
@@ -389,7 +389,7 @@ Selected files (3):
       <p>출력에 <code>AI (Semantic Router)</code>가 표시되면 AI 라우팅이 활성화된 것입니다. <code>Keyword matching</code>이 표시되면 API 키와 <code>SEMANTIC_ROUTER_ENABLED</code> 설정을 확인하세요.</p>
 
       <div class="callout">
-        <strong>보안 참고:</strong> API 키는 환경 변수에서만 읽히며, ai-nexus가 디스크에 저장하거나 로그에 기록하지 않습니다.
+        <strong>프라이버시 &amp; 보안:</strong> 텔레메트리 없음. 분석 없음. 외부 데이터 수집 없음. API 키는 환경 변수에서만 읽히며, 디스크에 저장하거나 로그에 기록하지 않습니다. 프롬프트는 시맨틱 라우팅을 명시적으로 활성화한 경우에<strong>만</strong> OpenAI/Anthropic에 전송됩니다. 미사용 시 키워드 기반 폴백이 완전히 오프라인으로 동작합니다.
       </div>
 
       <!-- 팀 규칙 -->

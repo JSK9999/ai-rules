@@ -766,6 +766,7 @@
       <div class="container">
         <h2 class="section-title fade-in">왜 ai-nexus인가?</h2>
         <p class="section-subtitle fade-in">수백 개 설치, 2-3개만 로딩. 모든 도구를 위한 하나의 소스.</p>
+        <p class="section-subtitle fade-in" style="margin-top:-40px;font-size:0.85rem;color:var(--text-tertiary)"><a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent);text-decoration:none">ETH Zurich 연구</a> (138개 레포, 5,694개 PR) 결과: 모든 규칙을 한 번에 로딩하면 성능이 ~3% 저하되고 비용이 20% 이상 증가합니다.</p>
         <div class="comparison">
           <div class="comparison-card before fade-in">
             <h3>Before</h3>
@@ -901,6 +902,26 @@
             <code>ai-nexus test &lt;prompt&gt;</code>
             <span>어떤 규칙이 로딩될지 미리보기</span>
           </div>
+          <div class="command-item fade-in fade-in-delay-4">
+            <code>ai-nexus list</code>
+            <span>설치된 규칙 목록 표시</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus get &lt;filename&gt;</code>
+            <span>커뮤니티 레지스트리에서 규칙 다운로드</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus add &lt;url&gt;</code>
+            <span>Git 저장소에서 규칙 추가</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus remove &lt;name&gt;</code>
+            <span>규칙 소스 제거</span>
+          </div>
+          <div class="command-item fade-in fade-in-delay-5">
+            <code>ai-nexus uninstall</code>
+            <span>ai-nexus 설치 제거</span>
+          </div>
         </div>
       </div>
     </section>
@@ -947,6 +968,7 @@
 
   <footer>
     <div class="container">
+      <p style="margin-bottom:8px;color:var(--text-secondary);font-size:0.8rem">텔레메트리 없음. 분석 없음. 외부 데이터 수집 없음. AI 라우팅은 옵트인 전용.</p>
       <p>
         Apache 2.0 License &middot;
         <a href="https://github.com/JSK9999/ai-nexus">GitHub</a> &middot;
