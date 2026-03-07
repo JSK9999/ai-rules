@@ -396,6 +396,19 @@ node bin/ai-nexus.cjs test "your prompt"
 
 ---
 
+## FAQ
+
+**How is this different from Claude Code skills (`alwaysApply: false`)?**
+
+Skills already handle on-demand loading within Claude Code. ai-nexus is for a different use case:
+- You use **multiple tools** (Claude Code + Cursor + Codex) and want one set of rules
+- You want **230+ community rules** without writing everything from scratch
+- You prefer routing via **keyword matching (free)** or a **cheaper model** instead of Claude
+
+If you only use Claude Code and skills cover your needs, you may not need ai-nexus.
+
+---
+
 ## Support
 
 If you find ai-nexus useful, give it a ⭐ on GitHub — it helps others discover the project and motivates continued development.
