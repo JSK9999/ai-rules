@@ -142,6 +142,7 @@
       <a href="#team-rules">팀 규칙</a>
       <a href="#multi-source">멀티 소스</a>
       <a href="#community">커뮤니티 레지스트리</a>
+      <a href="#faq">FAQ</a>
     </aside>
 
     <main class="content">
@@ -449,6 +450,26 @@ Selected files (3):
       <div class="callout">
         <strong>기여하기:</strong> 누구나 <a href="https://github.com/JSK9999/ai-nexus" style="color:var(--accent)">GitHub 저장소</a>에 PR로 규칙을 기여할 수 있습니다. 머지 후 즉시 사용 가능합니다.
       </div>
+
+      <!-- FAQ -->
+      <h2 id="faq">FAQ</h2>
+
+      <h3>Claude Code 스킬(<code>alwaysApply: false</code>)이랑 뭐가 다른가요?</h3>
+      <p>스킬은 이미 Claude Code 안에서 필요할 때만 로딩해줍니다. ai-nexus는 다른 유스케이스를 위한 거예요:</p>
+      <ul>
+        <li><strong>여러 툴</strong> (Claude Code + Cursor + Codex)을 같이 쓰면서 룰을 한 곳에서 관리하고 싶을 때</li>
+        <li><strong>230개 이상 커뮤니티 룰</strong>을 직접 안 쓰고 바로 가져다 쓰고 싶을 때</li>
+        <li>Claude 대신 <strong>키워드 매칭(무료)</strong>이나 <strong>더 저렴한 모델</strong>로 라우팅하고 싶을 때</li>
+      </ul>
+      <p>Claude Code만 쓰고 스킬로 충분하면 ai-nexus가 필요 없을 수도 있습니다.</p>
+
+      <h3>CLAUDE.md나 AGENTS.md에 다 넣으면 되지 않나요?</h3>
+      <p>넣을 수는 있지만 규모가 커지면 문제가 됩니다. CLAUDE.md는 뭘 하든 매 프롬프트마다 전부 로드됩니다. 룰이 5개면 괜찮지만, 50개 이상이면 커밋 메시지 쓸 때 Docker best practices까지 같이 로드되는 거예요. <a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent)">ETH Zurich 연구</a>에서도 이게 성능과 비용 둘 다 악화시킨다고 나왔습니다.</p>
+      <p>ai-nexus는 프롬프트당 관련 있는 2-3개 룰만 로드하고, 나머지는 비활성 상태로 둡니다.</p>
+
+      <h3>Claude Code 스킬 쓰면 룰이 필요 없지 않나요?</h3>
+      <p>스킬은 <code>/commit</code>, <code>/review</code>처럼 직접 호출하는 작업 워크플로우에 좋습니다. 하지만 룰을 대체하지는 못해요. 룰은 코딩 컨벤션, 보안 기준, 네이밍 패턴처럼 자동으로 적용되는 가이드라인입니다. 코드 짤 때마다 <code>/security-checklist</code>를 기억해서 호출할 수는 없잖아요.</p>
+      <p>ai-nexus는 룰과 스킬 둘 다 프롬프트 기반으로 라우팅해서, 직접 호출하지 않아도 필요한 컨텍스트가 자동으로 로드됩니다.</p>
     </main>
   </div>
 

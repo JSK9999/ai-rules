@@ -142,6 +142,7 @@
       <a href="#team-rules">Team Rules</a>
       <a href="#multi-source">Multi-Source</a>
       <a href="#community">Community Registry</a>
+      <a href="#faq">FAQ</a>
     </aside>
 
     <main class="content">
@@ -449,6 +450,26 @@ Selected files (3):
       <div class="callout">
         <strong>Contributing:</strong> Anyone can contribute rules via PR to the <a href="https://github.com/JSK9999/ai-nexus" style="color:var(--accent)">GitHub repo</a>. Rules become available immediately after merge.
       </div>
+
+      <!-- FAQ -->
+      <h2 id="faq">FAQ</h2>
+
+      <h3>How is this different from Claude Code skills (<code>alwaysApply: false</code>)?</h3>
+      <p>Skills already handle on-demand loading within Claude Code. ai-nexus is for a different use case:</p>
+      <ul>
+        <li>You use <strong>multiple tools</strong> (Claude Code + Cursor + Codex) and want one set of rules</li>
+        <li>You want <strong>230+ community rules</strong> without writing everything from scratch</li>
+        <li>You prefer routing via <strong>keyword matching (free)</strong> or a <strong>cheaper model</strong> instead of Claude</li>
+      </ul>
+      <p>If you only use Claude Code and skills cover your needs, you may not need ai-nexus.</p>
+
+      <h3>Why not just put everything in CLAUDE.md or AGENTS.md?</h3>
+      <p>You can &mdash; but it doesn't scale. CLAUDE.md loads on every prompt regardless of what you're doing. With 5 rules, that's fine. With 50+, you're burning tokens on Docker best practices while writing a commit message. The <a href="https://arxiv.org/pdf/2602.11988" style="color:var(--accent)">ETH Zurich study</a> shows this hurts both performance and cost.</p>
+      <p>ai-nexus solves this by loading only 2-3 relevant rules per prompt, while keeping the rest parked.</p>
+
+      <h3>Why not just use Claude Code skills instead of rules?</h3>
+      <p>Skills are great for on-demand workflows you explicitly invoke (<code>/commit</code>, <code>/review</code>). But they don't replace rules &mdash; rules are passive guidelines that apply automatically (coding conventions, security standards, naming patterns). You shouldn't have to remember to invoke <code>/security-checklist</code> every time you write code.</p>
+      <p>ai-nexus handles both: it routes rules <em>and</em> skills based on your prompt, so the right context loads automatically without you thinking about it.</p>
     </main>
   </div>
 

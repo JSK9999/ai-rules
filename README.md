@@ -407,6 +407,18 @@ Skills already handle on-demand loading within Claude Code. ai-nexus is for a di
 
 If you only use Claude Code and skills cover your needs, you may not need ai-nexus.
 
+**Why not just put everything in CLAUDE.md or AGENTS.md?**
+
+You can — but it doesn't scale. CLAUDE.md loads on every prompt regardless of what you're doing. With 5 rules, that's fine. With 50+, you're burning tokens on Docker best practices while writing a commit message. The [ETH Zurich study](https://arxiv.org/pdf/2602.11988) shows this hurts both performance and cost.
+
+ai-nexus solves this by loading only 2-3 relevant rules per prompt, while keeping the rest parked.
+
+**Why not just use Claude Code skills instead of rules?**
+
+Skills are great for on-demand workflows you explicitly invoke (`/commit`, `/review`). But they don't replace rules — rules are passive guidelines that apply automatically (coding conventions, security standards, naming patterns). You shouldn't have to remember to invoke `/security-checklist` every time you write code.
+
+ai-nexus handles both: it routes rules *and* skills based on your prompt, so the right context loads automatically without you thinking about it.
+
 ---
 
 ## Support
