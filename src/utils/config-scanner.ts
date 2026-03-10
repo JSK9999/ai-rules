@@ -67,6 +67,31 @@ function parseFileMeta(filePath: string): { name: string; description: string } 
 }
 
 /**
+ * Recursively scan a directory for markdown files
+ */
+function scanRecursive(dir: string, baseDir: string, category: string, files: ConfigFile[]): void {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      scanRecursive(fullPath, baseDir, category, files);
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+      const meta = parseFileMeta(fullPath);
+      files.push({
+        name: meta.name,
+        file: relativePath,
+        path: `${category}/${relativePath}`,
+        description: meta.description,
+        category,
+      });
+    }
+  }
+}
+
+/**
  * Scan a directory for markdown files and extract metadata
  */
 function scanCategoryDir(dir: string, category: string): ConfigFile[] {
@@ -74,38 +99,7 @@ function scanCategoryDir(dir: string, category: string): ConfigFile[] {
 
   if (!fs.existsSync(dir)) return files;
 
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      // Scan subdirectory
-      const subEntries = fs.readdirSync(fullPath, { withFileTypes: true });
-      for (const subEntry of subEntries) {
-        if (!subEntry.isFile() || !subEntry.name.endsWith('.md')) continue;
-        const subFile = subEntry.name;
-        const subFilePath = path.join(fullPath, subFile);
-        const meta = parseFileMeta(subFilePath);
-        files.push({
-          name: meta.name,
-          file: `${entry.name}/${subFile}`,
-          path: `${category}/${entry.name}/${subFile}`,
-          description: meta.description,
-          category,
-        });
-      }
-    } else if (entry.isFile() && entry.name.endsWith('.md')) {
-      const meta = parseFileMeta(fullPath);
-      files.push({
-        name: meta.name,
-        file: entry.name,
-        path: `${category}/${entry.name}`,
-        description: meta.description,
-        category,
-      });
-    }
-  }
+  scanRecursive(dir, dir, category, files);
 
   return files;
 }
