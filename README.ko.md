@@ -19,7 +19,7 @@ npx ai-nexus install
 
 ## 문제
 
-`alwaysApply: true` 룰은 매 프롬프트마다 전부 로딩됩니다 — 많을수록 불필요한 토큰 낭비가 커집니다. `alwaysApply: false`라도 AI 도구가 직접 판단하므로 오버헤드가 발생합니다. 스킬과 커맨드는 호출할 때만 로딩되지만, 뭘 언제 호출해야 하는지 기억해야 합니다.
+`alwaysApply: true` 룰은 매 프롬프트마다 전부 로딩됩니다 — 많을수록 토큰 낭비가 커집니다. `alwaysApply: false`라도 Claude가 200개 룰의 description을 전부 읽고 뭘 로딩할지 판단합니다 — 코드 작성 대신 룰 필터링에 Claude 토큰을 쓰는 셈입니다. 스킬과 커맨드는 호출할 때만 로딩되지만, 뭘 언제 호출해야 하는지 기억해야 합니다.
 
 그래서 대부분 자기검열을 합니다. 관리가 부담되어 룰이나 스킬을 적게 설치하고, 유용한 컨텍스트를 놓치게 됩니다.
 
@@ -29,7 +29,7 @@ npx ai-nexus install
 
 ## 해결
 
-**ai-nexus**는 200개 이상의 룰과 스킬을 설치해도 토큰 걱정이 없습니다. 시맨틱 라우터가 프롬프트당 관련 있는 2-3개만 로딩합니다 — 룰, 스킬, 커맨드, 에이전트 전부. 한 번 작성하면 모든 도구에 배포:
+**ai-nexus**는 룰 필터링을 **Claude 바깥에서** 처리합니다. 시맨틱 라우터 훅이 Claude가 시작되기 전에 실행되어 관련 있는 2-3개 파일만 `rules/`에 두고 나머지는 `rules-inactive/`로 물리적으로 빼버립니다. Claude는 나머지 200개가 있는지도 모릅니다. 필터링은 키워드 매칭(무료) 또는 GPT-4o-mini(월 ~$0.50)가 처리. 한 번 작성하면 모든 도구에 배포:
 
 ```
 한 번 작성:
@@ -99,7 +99,7 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 ### Claude Code: 시맨틱 라우터
 
-매 프롬프트마다 훅이 실행되어 실제로 필요한 룰과 스킬을 분석합니다:
+`alwaysApply: false`는 Claude가 컨텍스트 안에서 모든 description을 읽고 판단합니다. ai-nexus는 Claude가 시작되기 **전에** 훅이 실행되어 관련 파일을 `rules/`로, 나머지를 `rules-inactive/`로 물리적으로 이동시킵니다. Claude는 불필요한 파일을 아예 보지 않습니다:
 
 ```
 ~/.claude/

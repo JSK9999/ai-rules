@@ -19,7 +19,7 @@ npx ai-nexus install
 
 ## The Problem
 
-Rules with `alwaysApply: true` load on every prompt — and the more you have, the more tokens you waste on irrelevant context. Even with `alwaysApply: false`, the AI tool itself decides what to load, which adds overhead. Skills and commands only load when invoked, but that means you have to remember what to call and when.
+Rules with `alwaysApply: true` load on every prompt — the more you have, the more tokens you waste. With `alwaysApply: false`, Claude reads every rule's description to decide what to load — all 200 descriptions sit in Claude's context while it picks 2-3. You're paying Claude to filter rules instead of writing code. Skills and commands only load when invoked, but that means you have to remember what to call and when.
 
 Most people end up self-censoring: only installing a handful of rules or skills to keep things manageable. That means leaving useful context on the table.
 
@@ -29,7 +29,7 @@ On top of that, every AI tool has its own format — `.claude/rules/*.md`, `.cur
 
 ## The Solution
 
-**ai-nexus** lets you install 200+ rules and skills without worrying about token waste. A semantic router loads only 2-3 relevant files per prompt — rules, skills, commands, agents, all of it. Write once, deploy across all your tools:
+**ai-nexus** filters rules **before Claude sees them**. A semantic router hook runs on each prompt, picks 2-3 relevant files, and physically parks the rest in `rules-inactive/`. Claude only sees what it needs — it doesn't even know the other 200 files exist. Filtering is done by keyword matching (free) or GPT-4o-mini (~$0.50/month), not by Claude. Write once, deploy across all your tools:
 
 ```
 Write once:
@@ -99,7 +99,7 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 ### Claude Code: Semantic Router
 
-A hook runs on every prompt, analyzing what rules and skills you actually need:
+Unlike `alwaysApply: false` where Claude reads all descriptions inside its context, ai-nexus runs a hook **before** Claude starts. It moves relevant files into `rules/` and parks the rest in `rules-inactive/`. Claude never sees the irrelevant ones:
 
 ```
 ~/.claude/
