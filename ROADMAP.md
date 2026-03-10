@@ -1,3 +1,5 @@
+[한국어](ROADMAP.ko.md) | **English**
+
 # Roadmap
 
 This document outlines the current priorities and future direction of ai-nexus. It's meant to help contributors understand where the project is heading and where help is most needed.
