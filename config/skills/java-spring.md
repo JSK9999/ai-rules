@@ -10,16 +10,19 @@ Prefer a clear layered structure.
 
 Typical layout:
 
+```
 src/main/java/com/example/app
-
-- controller → HTTP layer
-- service → business logic
-- repository → persistence
-- entity → JPA models
-- dto → request/response objects
-- config → security and configuration
+├── controller   → HTTP layer
+├── service      → business logic
+├── repository   → persistence
+├── entity       → JPA models
+├── dto          → request/response objects
+└── config       → security and configuration
+```
 
 Avoid putting business logic in controllers.
+
+---
 
 ## REST Controller Design
 
@@ -33,6 +36,7 @@ Responsibilities:
 
 Example pattern:
 
+```java
 @RestController
 @RequestMapping("/api/users")
 class UserController {
@@ -44,16 +48,21 @@ class UserController {
     }
 
 }
+```
 
 Follow standard REST endpoints:
 
-GET /users  
-GET /users/{id}  
-POST /users  
-PUT /users/{id}  
+```
+GET /users
+GET /users/{id}
+POST /users
+PUT /users/{id}
 DELETE /users/{id}
+```
 
-Return appropriate status codes.
+Return appropriate HTTP status codes.
+
+---
 
 ## Service Layer
 
@@ -67,6 +76,7 @@ Guidelines:
 
 Example:
 
+```java
 @Service
 class UserService {
 
@@ -77,6 +87,9 @@ class UserService {
     }
 
 }
+```
+
+---
 
 ## Persistence with JPA
 
@@ -91,9 +104,13 @@ Guidelines:
 
 Example:
 
+```java
 @ManyToOne(fetch = FetchType.LAZY)
+```
 
 Use DTOs for responses.
+
+---
 
 ## Dependency Injection
 
@@ -101,13 +118,20 @@ Prefer constructor injection.
 
 Good:
 
+```java
 UserService(UserRepository repo)
+```
 
 Avoid:
 
-@Autowired field injection.
+```java
+@Autowired
+private UserRepository repo;
+```
 
 Constructor injection improves testability.
+
+---
 
 ## Configuration
 
@@ -115,7 +139,9 @@ Keep configuration external.
 
 Use:
 
+```
 application.yml
+```
 
 Profiles should separate environments:
 
@@ -123,11 +149,15 @@ Profiles should separate environments:
 - test
 - prod
 
-Example:
+Example configuration:
 
+```yaml
 spring:
-datasource:
-url: jdbc:postgresql://localhost:5432/app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/app
+```
+
+---
 
 ## General Practices
 
