@@ -40,10 +40,12 @@ export async function fetchRegistry(): Promise<RegistryFile[]> {
     if (!item.path.endsWith('.md')) continue;
 
     const parts = item.path.replace('config/', '').split('/');
-    if (parts.length !== 2) continue;
+    if (parts.length < 2) continue;
 
-    const [category, name] = parts;
+    const category = parts[0];
     if (!CATEGORIES.includes(category)) continue;
+
+    const name = parts.slice(1).join('/');
 
     files.push({
       name,
