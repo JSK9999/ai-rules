@@ -2,8 +2,8 @@
 
 # ai-nexus
 
-> Claude Code loads all rules into context every session.
-> ai-nexus loads only what you need — and syncs rules across Claude, Cursor, and Codex.
+> Install 200+ rules and skills. Only 2-3 load per prompt.
+> Write once, deploy across Claude Code, Cursor, and Codex.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
@@ -19,13 +19,17 @@ npx ai-nexus install
 
 ## The Problem
 
-Every AI coding tool has its own rule format — `.claude/rules/*.md`, `.cursor/rules/*.mdc`, `.codex/AGENTS.md`. You end up maintaining the same rules in multiple places, and they inevitably drift apart. On top of that, every prompt loads all your rules, wasting tokens on irrelevant context.
+Whether you use rules, skills, slash commands, or agents — every AI coding tool loads all of them into context on every prompt. With 5 files, that's fine. With 50+, you're burning tokens on React best practices while writing a commit message.
 
-A [recent study from ETH Zurich](https://arxiv.org/pdf/2602.11988) (12 repos, 5,694 PRs) confirms this: **loading all rules at once hurts performance by ~3% and increases cost by 20%+.** Even hand-written context files only helped by 4% — and only when kept under 30 lines. The takeaway: less is more, and only relevant rules should be loaded per prompt.
+Most people end up self-censoring: only installing a handful of rules or skills to avoid token waste. That means leaving useful context on the table.
+
+A [recent study from ETH Zurich](https://arxiv.org/pdf/2602.11988) (12 repos, 5,694 PRs) confirms this: **loading all rules at once hurts performance by ~3% and increases cost by 20%+.** The takeaway: only relevant context should be loaded per prompt.
+
+On top of that, every AI tool has its own format — `.claude/rules/*.md`, `.cursor/rules/*.mdc`, `.codex/AGENTS.md`. If you use more than one tool, you end up maintaining the same rules and skills in multiple places, and they inevitably drift apart.
 
 ## The Solution
 
-**ai-nexus** lets you write rules once and distribute them across all your tools — while keeping token usage minimal with smart rule loading:
+**ai-nexus** lets you install 200+ rules and skills without worrying about token waste. A semantic router loads only 2-3 relevant files per prompt — rules, skills, commands, agents, all of it. Write once, deploy across all your tools:
 
 ```
 Write once:
@@ -38,7 +42,7 @@ Deploy everywhere:
   ✓ Codex        → .codex/AGENTS.md (aggregated)
 
 One source of truth. Every tool in sync.
-Only relevant rules loaded per prompt.
+200+ installed, only 2-3 loaded per prompt.
 ```
 
 ---
@@ -47,12 +51,12 @@ Only relevant rules loaded per prompt.
 
 | | Benefit | Detail |
 |---|---|---|
-| **Only relevant rules loaded** | Hundreds of rules installed, only 2-3 loaded per prompt | Semantic Router analyzes your prompt and picks just the rules you need. No unnecessary context = better AI responses + less token waste. |
-| **Write once, deploy everywhere** | One rule file → three tools | Write a single `.md` rule. ai-nexus auto-converts to `.mdc` for Cursor and `AGENTS.md` for Codex. No more copy-pasting. |
-| **AI-powered rule selection** | GPT-4o-mini or Claude Haiku picks rules for you | A hook runs on every prompt, loading only what you need. Costs ~$0.50/month. Falls back to keyword matching with zero cost. |
-| **Team-wide consistency** | Git-based rule sharing | Everyone installs from the same repo. `npx ai-nexus update` keeps the whole team in sync. |
+| **Install everything, load only what's needed** | 200+ rules and skills installed, only 2-3 loaded per prompt | Semantic Router analyzes your prompt and picks just what you need — rules, skills, commands, agents. No more self-censoring what to install. |
+| **Write once, deploy everywhere** | One file → three tools | Write a single `.md` file. ai-nexus auto-converts to `.mdc` for Cursor and `AGENTS.md` for Codex. No more copy-pasting. |
+| **AI-powered selection** | GPT-4o-mini or Claude Haiku picks files for you | A hook runs on every prompt, loading only what you need. Costs ~$0.50/month. Falls back to keyword matching with zero cost. |
+| **Team-wide consistency** | Git-based sharing | Everyone installs from the same repo. `npx ai-nexus update` keeps the whole team in sync. |
 | **Your edits are safe** | Non-destructive updates | Install and update never overwrite your local customizations. Only new files are added. |
-| **Community marketplace** | Browse, install, remove — from your browser | `npx ai-nexus browse` opens a local web UI. Community rules are available instantly after PR merge. |
+| **Community marketplace** | Browse, install, remove — from your browser | `npx ai-nexus browse` opens a local web UI. 230+ community rules and skills available instantly after PR merge. |
 
 ---
 
@@ -85,9 +89,9 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 | Tool | How it works | Token overhead |
 |------|--------------|----------------|
-| **Claude Code** | Semantic Router dynamically swaps rules per prompt | Only relevant rules loaded |
-| **Cursor** | Converts rules to `.mdc` format; Cursor's built-in search handles filtering | Depends on Cursor's search |
-| **Codex** | Aggregated `AGENTS.md` (rules merged into single file) | All rules loaded |
+| **Claude Code** | Semantic Router dynamically loads relevant rules and skills per prompt | Only 2-3 files loaded |
+| **Cursor** | Converts to `.mdc` format; Cursor's built-in search handles filtering | Depends on Cursor's search |
+| **Codex** | Aggregated `AGENTS.md` (all files merged into single file) | All files loaded |
 
 ---
 
@@ -95,7 +99,7 @@ npx ai-nexus install --rules github.com/your-org/team-rules
 
 ### Claude Code: Semantic Router
 
-A hook runs on every prompt, analyzing what rules you actually need:
+A hook runs on every prompt, analyzing what rules and skills you actually need:
 
 ```
 ~/.claude/
@@ -112,12 +116,12 @@ export OPENAI_API_KEY=sk-xxx        # or ANTHROPIC_API_KEY
 export SEMANTIC_ROUTER_ENABLED=true
 ```
 
-GPT-4o-mini or Claude Haiku analyzes your prompt and picks the right rules. Cost: ~$0.50/month. Requires explicit opt-in.
+GPT-4o-mini or Claude Haiku analyzes your prompt and picks the right rules and skills. Cost: ~$0.50/month. Requires explicit opt-in.
 
 > **Full setup guide:** [Semantic Router Setup](https://jsk9999.github.io/ai-nexus/docs.html#semantic-router-setup) — provider selection, environment variables, custom models, and verification.
 
 **Without AI** (default):
-Keyword matching activates rules based on words in your prompt. Zero cost, no API key needed.
+Keyword matching activates rules and skills based on words in your prompt. Zero cost, no API key needed.
 
 ### Cursor: Rule Converter
 
@@ -398,26 +402,31 @@ node bin/ai-nexus.cjs test "your prompt"
 
 ## FAQ
 
+**Do I actually need this?**
+
+If you use one tool with a few rules or skills, probably not — your tool's built-in settings are enough. ai-nexus is for people who:
+- Install a lot of rules/skills and want them loaded efficiently (200+ installed, 2-3 loaded)
+- Use **multiple tools** (Claude Code + Cursor + Codex) and want one source of truth
+- Want **230+ community rules and skills** without writing everything from scratch
+
+**I only use skills, not rules. Is this relevant?**
+
+Yes. The semantic router handles skills, rules, commands, and agents equally. Install 50 skills and only the relevant ones load per prompt. The "install everything without worrying about tokens" benefit applies to skills just as much as rules.
+
 **How is this different from Claude Code skills (`alwaysApply: false`)?**
 
-Skills already handle on-demand loading within Claude Code. ai-nexus is for a different use case:
-- You use **multiple tools** (Claude Code + Cursor + Codex) and want one set of rules
-- You want **230+ community rules** without writing everything from scratch
-- You prefer routing via **keyword matching (free)** or a **cheaper model** instead of Claude
-
-If you only use Claude Code and skills cover your needs, you may not need ai-nexus.
+Skills handle on-demand loading within Claude Code. ai-nexus adds:
+- **Cross-tool sync** — deploy skills to Cursor and Codex too, not just Claude Code
+- **Smarter routing** — keyword matching (free) or a cheaper model instead of Claude doing the filtering
+- **Community library** — 230+ rules and skills ready to use
 
 **Why not just put everything in CLAUDE.md or AGENTS.md?**
 
-You can — but it doesn't scale. CLAUDE.md loads on every prompt regardless of what you're doing. With 5 rules, that's fine. With 50+, you're burning tokens on Docker best practices while writing a commit message. The [ETH Zurich study](https://arxiv.org/pdf/2602.11988) shows this hurts both performance and cost.
+Works fine with 5 files. With 50+, you're burning tokens on Docker best practices while writing a commit message. The [ETH Zurich study](https://arxiv.org/pdf/2602.11988) shows this hurts both performance and cost. ai-nexus loads only 2-3 relevant files per prompt.
 
-ai-nexus solves this by loading only 2-3 relevant rules per prompt, while keeping the rest parked.
+**Skills vs rules?**
 
-**Why not just use Claude Code skills instead of rules?**
-
-Skills are great for on-demand workflows you explicitly invoke (`/commit`, `/review`). But they don't replace rules — rules are passive guidelines that apply automatically (coding conventions, security standards, naming patterns). You shouldn't have to remember to invoke `/security-checklist` every time you write code.
-
-ai-nexus handles both: it routes rules *and* skills based on your prompt, so the right context loads automatically without you thinking about it.
+Skills are workflows you explicitly invoke (`/commit`, `/review`). Rules are passive guidelines that apply automatically (coding conventions, security standards, naming patterns). ai-nexus routes both based on your prompt — no need to remember which to invoke.
 
 ---
 
