@@ -9,7 +9,7 @@
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**[Homepage](https://jsk9999.github.io/ai-nexus/)** | **[Documentation](https://jsk9999.github.io/ai-nexus/docs.html)**
+**[Homepage](https://jsk9999.github.io/ai-nexus/)** | **[Documentation](https://jsk9999.github.io/ai-nexus/docs.html)** | **[Roadmap](ROADMAP.md)**
 
 ```bash
 npx ai-nexus install
