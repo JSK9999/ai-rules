@@ -19,9 +19,9 @@ npx ai-nexus install
 
 ## The Problem
 
-Whether you use rules, skills, slash commands, or agents — every AI coding tool loads all of them into context on every prompt. With 5 files, that's fine. With 50+, you're burning tokens on React best practices while writing a commit message.
+Rules with `alwaysApply: true` load on every prompt — and the more you have, the more tokens you waste on irrelevant context. Even with `alwaysApply: false`, the AI tool itself decides what to load, which adds overhead. Skills and commands only load when invoked, but that means you have to remember what to call and when.
 
-Most people end up self-censoring: only installing a handful of rules or skills to avoid token waste. That means leaving useful context on the table.
+Most people end up self-censoring: only installing a handful of rules or skills to keep things manageable. That means leaving useful context on the table.
 
 A [recent study from ETH Zurich](https://arxiv.org/pdf/2602.11988) (12 repos, 5,694 PRs) confirms this: **loading all rules at once hurts performance by ~3% and increases cost by 20%+.** The takeaway: only relevant context should be loaded per prompt.
 
