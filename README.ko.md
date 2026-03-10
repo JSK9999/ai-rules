@@ -2,8 +2,8 @@
 
 # ai-nexus
 
-> 200개 이상의 룰과 스킬을 설치하세요. 프롬프트당 2-3개만 로딩. 컨텍스트 손실 제로.
-> 한 번 작성하면 Claude Code, Cursor, Codex에 자동 배포.
+> 200개 이상의 룰과 스킬을 설치하세요. 프롬프트당 2-3개만 로딩.
+> 필터링은 Claude 안이 아니라 Claude 바깥에서.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
@@ -31,7 +31,7 @@ npx ai-nexus install
 
 **ai-nexus**는 룰 필터링을 **Claude 바깥에서** 처리합니다. 시맨틱 라우터 훅이 Claude가 시작되기 전에 실행되어 관련 있는 2-3개 파일만 `rules/`에 두고 나머지는 `rules-inactive/`로 물리적으로 빼버립니다. Claude는 나머지가 있는지도 모릅니다. 필터링은 키워드 매칭(무료) 또는 GPT-4o-mini(월 ~$0.50)가 처리.
 
-**무손실 컨텍스트 관리** — 아무것도 삭제되지 않고 잠시 빠져 있을 뿐입니다. 모든 룰과 스킬은 설치된 상태로 유지됩니다. 다음 프롬프트에서 필요하면 즉시 다시 활성화됩니다. 컨텍스트를 잃는 게 아니라, 지금 필요 없는 것만 안 로딩하는 겁니다. 한 번 작성하면 모든 도구에 배포:
+삭제가 아니라 `rules-inactive/`에 보관. 다음 프롬프트에서 필요하면 즉시 재활성화. 한 번 작성하면 모든 도구에 배포:
 
 ```
 한 번 작성:
@@ -53,7 +53,7 @@ npx ai-nexus install
 
 | | 강점 | 상세 |
 |---|---|---|
-| **무손실 컨텍스트 관리** | 200개 이상 설치, 프롬프트당 2-3개만 로딩, 컨텍스트 손실 제로 | 삭제가 아니라 비활성화. 필요하면 즉시 재활성화. 시맨틱 라우터가 프롬프트마다 필요한 것만 선택. 자기검열할 필요 없음. |
+| **Claude 바깥에서 필터링** | 200개 이상 설치, 프롬프트당 2-3개만 로딩 | 네이티브 `alwaysApply: false`는 Claude가 모든 description을 읽고 판단. ai-nexus는 Claude 시작 전에 필터링 — Claude는 불필요한 파일을 아예 안 봄. 필터링 비용 $0(키워드) 또는 ~$0.50/월(GPT-4o-mini). |
 | **한 번 작성, 어디서든 배포** | 하나의 파일 → 세 가지 도구 | `.md` 파일 하나만 작성하면 Cursor용 `.mdc`, Codex용 `AGENTS.md`로 자동 변환. 복붙 불필요. |
 | **AI 기반 선택** | GPT-4o-mini 또는 Claude Haiku가 선택 | 매 프롬프트마다 훅이 실행되어 필요한 것만 로딩. 월 ~$0.50. AI 없이도 키워드 매칭으로 무료 동작. |
 | **팀 전체 일관성** | Git 기반 공유 | 모든 팀원이 같은 저장소에서 설치. `npx ai-nexus update` 한 번으로 전팀 동기화. |

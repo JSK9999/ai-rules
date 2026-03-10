@@ -2,7 +2,8 @@
 
 # ai-nexus
 
-> Install 200+ rules and skills. Only 2-3 load per prompt. Zero context lost.
+> Install 200+ rules and skills. Only 2-3 load per prompt.
+> Filtering happens before Claude, not inside Claude.
 > Write once, deploy across Claude Code, Cursor, and Codex.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
@@ -31,7 +32,7 @@ On top of that, every AI tool has its own format — `.claude/rules/*.md`, `.cur
 
 **ai-nexus** filters rules **before Claude sees them**. A semantic router hook runs on each prompt, picks 2-3 relevant files, and physically parks the rest in `rules-inactive/`. Claude only sees what it needs — it doesn't even know the rest exist. Filtering is done by keyword matching (free) or GPT-4o-mini (~$0.50/month), not by Claude.
 
-**Lossless context management** — nothing is deleted, just parked. Every rule and skill stays installed. When the next prompt needs it, it's activated instantly. You never lose context, you just don't load what's irrelevant right now. Write once, deploy across all your tools:
+Nothing is deleted — just parked in `rules-inactive/` and reactivated when the next prompt needs it. Write once, deploy across all your tools:
 
 ```
 Write once:
@@ -53,7 +54,7 @@ One source of truth. Every tool in sync.
 
 | | Benefit | Detail |
 |---|---|---|
-| **Lossless context management** | 200+ installed, only 2-3 loaded per prompt, zero context lost | Nothing is deleted — irrelevant files are parked and reactivated when needed. Semantic Router picks what you need per prompt. No self-censoring what to install. |
+| **Filter before Claude, not inside Claude** | 200+ installed, only 2-3 loaded per prompt | Native `alwaysApply: false` has Claude read all descriptions to decide. ai-nexus filters before Claude starts — Claude never sees irrelevant files. Filtering costs $0 (keywords) or ~$0.50/mo (GPT-4o-mini). |
 | **Write once, deploy everywhere** | One file → three tools | Write a single `.md` file. ai-nexus auto-converts to `.mdc` for Cursor and `AGENTS.md` for Codex. No more copy-pasting. |
 | **AI-powered selection** | GPT-4o-mini or Claude Haiku picks files for you | A hook runs on every prompt, loading only what you need. Costs ~$0.50/month. Falls back to keyword matching with zero cost. |
 | **Team-wide consistency** | Git-based sharing | Everyone installs from the same repo. `npx ai-nexus update` keeps the whole team in sync. |
