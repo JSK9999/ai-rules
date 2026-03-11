@@ -2,7 +2,7 @@
 
 # ai-nexus
 
-> 200개 이상의 룰과 스킬을 설치하세요. 프롬프트당 2-3개만 로딩.
+> 등록한 룰과 스킬이 몇 개든, 프롬프트당 2-3개만 로딩.
 > 필터링은 Claude 안이 아니라 Claude 바깥에서.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
@@ -44,7 +44,7 @@ npx ai-nexus install
   ✓ Codex        → .codex/AGENTS.md (통합)
 
 하나의 소스. 모든 도구가 동기화됩니다.
-200개 이상 설치, 프롬프트당 2-3개만 로딩.
+몇 개를 설치하든, 프롬프트당 2-3개만 로딩.
 ```
 
 ---
@@ -53,7 +53,7 @@ npx ai-nexus install
 
 | | 강점 | 상세 |
 |---|---|---|
-| **Claude 바깥에서 필터링** | 200개 이상 설치, 프롬프트당 2-3개만 로딩 | 네이티브 `alwaysApply: false`는 Claude가 모든 description을 읽고 판단. ai-nexus는 Claude 시작 전에 필터링 — Claude는 불필요한 파일을 아예 안 봄. 필터링 비용 $0(키워드) 또는 ~$0.50/월(GPT-4o-mini). |
+| **Claude 바깥에서 필터링** | 몇 개를 설치하든, 프롬프트당 2-3개만 로딩 | 네이티브 `alwaysApply: false`는 Claude가 모든 description을 읽고 판단. ai-nexus는 Claude 시작 전에 필터링 — Claude는 불필요한 파일을 아예 안 봄. 필터링 비용 $0(키워드) 또는 ~$0.50/월(GPT-4o-mini). |
 | **한 번 작성, 어디서든 배포** | 하나의 파일 → 세 가지 도구 | `.md` 파일 하나만 작성하면 Cursor용 `.mdc`, Codex용 `AGENTS.md`로 자동 변환. 복붙 불필요. |
 | **AI 기반 선택** | GPT-4o-mini 또는 Claude Haiku가 선택 | 매 프롬프트마다 훅이 실행되어 필요한 것만 로딩. 월 ~$0.50. AI 없이도 키워드 매칭으로 무료 동작. |
 | **팀 전체 일관성** | Git 기반 공유 | 모든 팀원이 같은 저장소에서 설치. `npx ai-nexus update` 한 번으로 전팀 동기화. |
@@ -407,7 +407,7 @@ node bin/ai-nexus.cjs test "your prompt"
 **나한테 이게 필요해?**
 
 도구 하나에 룰이나 스킬 몇 개면 굳이 필요 없습니다. 해당 도구 자체 설정으로 충분해요. ai-nexus는 이런 사람들을 위한 거예요:
-- 룰/스킬을 많이 설치하고 효율적으로 로딩하고 싶을 때 (200개 이상 설치, 2-3개만 로딩)
+- 룰/스킬을 많이 설치하고 효율적으로 로딩하고 싶을 때 (몇 개를 설치하든, 2-3개만 로딩)
 - **여러 도구** (Claude Code + Cursor + Codex)를 쓰면서 한 곳에서 관리하고 싶을 때
 - **230개 이상 커뮤니티 룰과 스킬**을 직접 안 쓰고 바로 가져다 쓰고 싶을 때
 
