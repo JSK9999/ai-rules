@@ -1,7 +1,7 @@
 {
   "name": "ai-nexus",
   "version": "1.5.6",
-  "description": "Install 200+ AI coding rules and skills — only 2-3 load per prompt. Write once, deploy across Claude Code, Cursor, and Codex.",
+  "description": "Only 2-3 relevant rules and skills load per prompt. The rest stay hidden from Claude. Works across Claude Code, Cursor, and Codex.",
   "main": "dist/index.js",
   "bin": {
     "ai-nexus": "bin/ai-nexus.cjs"
