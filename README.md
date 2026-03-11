@@ -22,7 +22,7 @@ npx ai-nexus install
 
 Rules with `alwaysApply: true` load on every prompt — the more you have, the more tokens you waste. With `alwaysApply: false`, Claude reads every rule's description to decide what to load — all your rule descriptions sit in Claude's context while it picks 2-3. You're paying Claude to filter rules instead of writing code. Skills and commands only load when invoked, but that means you have to remember what to call and when.
 
-Most people end up self-censoring: only installing a handful of rules or skills to keep things manageable. That means leaving useful context on the table.
+So most people only install a handful of rules. The more you have, the harder it is to know what's there — useful rules end up never loading or never getting installed in the first place.
 
 A [recent study from ETH Zurich](https://arxiv.org/pdf/2602.11988) (12 repos, 5,694 PRs) confirms this: **loading all rules at once hurts performance by ~3% and increases cost by 20%+.** The takeaway: only relevant context should be loaded per prompt.
 
