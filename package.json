@@ -1,6 +1,6 @@
 {
   "name": "ai-nexus",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "Only 2-3 relevant rules and skills load per prompt. The rest stay hidden from Claude. Works across Claude Code, Cursor, and Codex.",
   "main": "dist/index.js",
   "bin": {

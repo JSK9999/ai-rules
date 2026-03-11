@@ -2,9 +2,9 @@
 
 # ai-nexus
 
-> No matter how many rules and skills you install, only 2-3 load per prompt.
-> Filtering happens before Claude, not inside Claude.
-> Write once, deploy across Claude Code, Cursor, and Codex.
+> Only 2-3 relevant rules and skills load per prompt.
+> The rest are hidden from Claude completely.
+> Your rules and skills also work in Cursor and Codex — no extra setup.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
@@ -45,7 +45,7 @@ Deploy everywhere:
   ✓ Codex        → .codex/AGENTS.md (aggregated)
 
 One source of truth. Every tool in sync.
-No matter how many you install, only 2-3 loaded per prompt.
+Only 2-3 relevant rules and skills loaded per prompt.
 ```
 
 ---

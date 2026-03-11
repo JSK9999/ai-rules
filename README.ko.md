@@ -2,8 +2,9 @@
 
 # ai-nexus
 
-> 등록한 룰과 스킬이 몇 개든, 프롬프트당 2-3개만 로딩.
-> 필터링은 Claude 안이 아니라 Claude 바깥에서.
+> 프롬프트마다 관련 룰과 스킬 2-3개만 로딩.
+> 나머지는 Claude에게 아예 보이지 않음.
+> 같은 룰과 스킬이 Cursor, Codex에서도 추가 설정 없이 동작.
 
 [![npm version](https://img.shields.io/npm/v/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
 [![npm downloads](https://img.shields.io/npm/dw/ai-nexus.svg)](https://www.npmjs.com/package/ai-nexus)
@@ -44,7 +45,7 @@ npx ai-nexus install
   ✓ Codex        → .codex/AGENTS.md (통합)
 
 하나의 소스. 모든 도구가 동기화됩니다.
-몇 개를 설치하든, 프롬프트당 2-3개만 로딩.
+프롬프트마다 관련 룰과 스킬 2-3개만 로딩.
 ```
 
 ---
