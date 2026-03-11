@@ -2,7 +2,7 @@
 
 # ai-nexus
 
-> Install 200+ rules and skills. Only 2-3 load per prompt.
+> No matter how many rules and skills you install, only 2-3 load per prompt.
 > Filtering happens before Claude, not inside Claude.
 > Write once, deploy across Claude Code, Cursor, and Codex.
 
@@ -45,7 +45,7 @@ Deploy everywhere:
   ✓ Codex        → .codex/AGENTS.md (aggregated)
 
 One source of truth. Every tool in sync.
-200+ installed, only 2-3 loaded per prompt.
+No matter how many you install, only 2-3 loaded per prompt.
 ```
 
 ---
@@ -54,7 +54,7 @@ One source of truth. Every tool in sync.
 
 | | Benefit | Detail |
 |---|---|---|
-| **Filter before Claude, not inside Claude** | 200+ installed, only 2-3 loaded per prompt | Native `alwaysApply: false` has Claude read all descriptions to decide. ai-nexus filters before Claude starts — Claude never sees irrelevant files. Filtering costs $0 (keywords) or ~$0.50/mo (GPT-4o-mini). |
+| **Filter before Claude, not inside Claude** | However many installed, only 2-3 loaded per prompt | Native `alwaysApply: false` has Claude read all descriptions to decide. ai-nexus filters before Claude starts — Claude never sees irrelevant files. Filtering costs $0 (keywords) or ~$0.50/mo (GPT-4o-mini). |
 | **Write once, deploy everywhere** | One file → three tools | Write a single `.md` file. ai-nexus auto-converts to `.mdc` for Cursor and `AGENTS.md` for Codex. No more copy-pasting. |
 | **AI-powered selection** | GPT-4o-mini or Claude Haiku picks files for you | A hook runs on every prompt, loading only what you need. Costs ~$0.50/month. Falls back to keyword matching with zero cost. |
 | **Team-wide consistency** | Git-based sharing | Everyone installs from the same repo. `npx ai-nexus update` keeps the whole team in sync. |
@@ -408,7 +408,7 @@ node bin/ai-nexus.cjs test "your prompt"
 **Do I actually need this?**
 
 If you use one tool with a few rules or skills, probably not — your tool's built-in settings are enough. ai-nexus is for people who:
-- Install a lot of rules/skills and want them loaded efficiently (200+ installed, 2-3 loaded)
+- Install a lot of rules/skills and want them loaded efficiently (however many installed, only 2-3 loaded)
 - Use **multiple tools** (Claude Code + Cursor + Codex) and want one source of truth
 - Want **230+ community rules and skills** without writing everything from scratch
 
